@@ -2,7 +2,7 @@ import json
 import os
 import requests
 import google.auth.transport.requests
-from flask import Flask, redirect, render_template, request, session, abort, url_for
+from flask import Flask, redirect, render_template, request, session, abort, url_for, flash
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 from google.oauth2 import id_token
@@ -33,8 +33,21 @@ def login_is_required(function):
     return wrapper
 
 # default
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
+    if request.method == 'POST':
+        data = request.form
+        print(data)
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        if len(email) < 6:
+            flash('Email must be greater than 5 characters.', category='error')
+        elif len(name) < 2:
+            flash('First name must be greater than 1 character.', category='error')
+        else:
+            flash('Account created!', category='success')
+        
     index_html = render_template('index.html', message='Hello, World!', othera='aa')
     return index_html
 
