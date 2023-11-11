@@ -243,3 +243,9 @@ body {
 .container-a.active .toggle-right{
     transform: translateX(200%);
 }
+
+.alert {
+    bottom: 250px;
+    left: 100px;
+    z-index: 1000;
+}
