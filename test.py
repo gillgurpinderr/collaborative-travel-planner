@@ -85,10 +85,20 @@ def logout():
 
 # protected area
 @app.route("/protected")
-@login_is_required
 def protected_area():
-    protected_html = render_template('protected.html')
-    return protected_html
+    return render_template('protected.html')
+
+@app.route('/recommendation')
+def recommendation():
+    return render_template('recommendation.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
