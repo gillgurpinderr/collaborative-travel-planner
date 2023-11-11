@@ -51,11 +51,11 @@ body {
 }
 
 .container a:hover {
-    color: #ff5722;
+    color: #ffffff;
 }
 
 .container button {
-    background-color: #ff5722;
+    background-color: #1c3464;
     color: #fff;
     font-size: 14px;
     padding: 12px 40px;
@@ -71,8 +71,8 @@ body {
 
 .container button.hidden {
     background-color: transparent;
-    border: 1px solid #ff5722;
-    color: #ff5722;
+    border: 1px solid #ffffff;
+    color: #ffffff;
 }
 
 .container form {
@@ -196,9 +196,9 @@ body {
 }
 
 .toggle{
-    background-color: #512da8;
+    background-color: #1c3464;
     height: 100%;
-    background: linear-gradient(to right, #5c6bc0, #512da8);
+    background: linear-gradient(to right, #1c3464, #1c3464);
     color: #fff;
     position: relative;
     left: -100%;
