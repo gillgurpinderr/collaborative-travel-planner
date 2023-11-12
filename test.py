@@ -32,21 +32,37 @@ def login_is_required(function):
             return function()
     return wrapper
 
-# default
+def handle_sign_up(form):
+    name = form.get('name')
+    email = form.get('email')
+    password = form.get('password')
+    if len(email) < 6:
+        flash('Email must be greater than 5 characters.', category='error')
+    elif len(name) < 2:
+        flash('That is not your name.', category='error')
+    elif len(password) < 6:
+        flash('Password must be at least 5 characters.', category='error')
+    else:
+        flash('Account created!', category='success')
+        
+def handle_sign_in(form):
+    email = form.get('email')
+    password = form.get('password')
+    if len(email) < 6:
+        flash('Incorrect email.', category='error')
+    elif len(password) < 6:
+        flash('Incorrect password. Hint: passwords are greater than 5 characters.', category='error')
+    else:
+        flash('Signed in! Redirecting...', category='success')
+    
 @app.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        data = request.form
-        print(data)
-        email = request.form.get('email')
-        password = request.form.get('password')
-        
-        if len(email) < 6:
-            flash('Email must be greater than 5 characters.', category='error')
-        elif len(name) < 2:
-            flash('First name must be greater than 1 character.', category='error')
+        if 'name' in request.form:
+            handle_sign_up(request.form)
         else:
-            flash('Account created!', category='success')
+            handle_sign_in(request.form)
+
         
     index_html = render_template('index.html', message='Hello, World!', othera='aa')
     return index_html
