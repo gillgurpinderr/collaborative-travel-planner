@@ -8,14 +8,12 @@ from pip._vendor import cachecontrol
 from google.oauth2 import id_token
 
 auth = Blueprint('auth',__name__)
-# app.secret_key = "login" # secret key, i dont what this is used for, but error if not included
+
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # this will allow OAuth over insecure HTTP connection
 
 with open('website/client_secret.json', 'r') as secret_json: # open json, r is read mode
     client_secret = json.load(secret_json)
 GOOGLE_CLIENT_ID = client_secret['web']['client_id']
-
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # this will allow OAuth over insecure HTTP connection
-
 client_secrets_file = os.path.join(os.path.dirname(__file__), "client_secret.json")
 flow = Flow.from_client_secrets_file(
     client_secrets_file=client_secrets_file,
@@ -128,6 +126,3 @@ def about():
 @auth.route('/contact')
 def contact():
     return render_template('contact.html')
-
-if __name__ == '__main__':
-    auth.run(debug=True)
