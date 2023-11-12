@@ -6,22 +6,23 @@
         <title>WanderSync</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <!-- font awesome cdn -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+        <!-- fonts -->
         <link rel = "stylesheet" href = "static/fonts.css">
-
+        <!-- normalize css -->
         <link rel = "stylesheet" href = "static/normalize.css">
-
+        <!-- custom css -->
         <link rel = "stylesheet" href = "static/utility.css">
         <link rel = "stylesheet" href = "static/WanderSync.css">
         <link rel = "stylesheet" href = "static/responsive.css">
     </head>
-    <body>
 
+      <body>
+        <!-- navbar  -->
         <nav class = "navbar">
             <div class = "container flex">
-                <a href = "{{ url_for('protected_area') }}" class = "site-brand">
+                <a href = "{{ url_for('auth.protected_area') }}" class = "site-brand">
                     Wander<span>Sync</span>
                 </a>
 
@@ -32,87 +33,110 @@
                     <button type = "button" id = "navbar-close-btn" class = "flex">
                         <i class = "fas fa-times"></i>
                     </button>
-                   <ul class = "navbar-nav">
+                    <ul class = "navbar-nav">
                         <li class = "nav-item">
 
-                            <a href = "{{ url_for('protected_area') }}" class = 'nav-link'>Home</a>
+                            <a href = "{{ url_for('auth.protected_area') }}" class = 'nav-link'>Home</a>
                         </li>
                         <li class = "nav-item">
-                            <a href = "{{ url_for('recommendation') }}" class = 'nav-link'>Recommendations</a>
+                            <a href = "{{ url_for('auth.recommendation') }}" class = 'nav-link'>Recommendations</a>
                         </li>
                         <li class = "nav-item">
-                            <a href="{{ url_for('about') }}" class="nav-link">About</a>
+                            <a href="{{ url_for('auth.about') }}" class="nav-link">About</a>
                         </li>
                         <li class = "nav-item">
-                            <a href = "{{ url_for('contact') }}" class = 'nav-link'>Contact</a>
+                            <a href = "{{ url_for('auth.contact') }}" class = 'nav-link'>Contact</a>
                         </li>
-                   </ul>
+                    </ul>
                 </div>
             </div>
         </nav>
+        <!-- end of navbar  -->
 
+        <!-- header -->
         <header class = "flex header-sm">
             <div class = "container">
                 <div class = "header-title">
-                    <h1>Contact</h1>
-                    <p>We offer the best prices for vacations, hotels, and activities across the globe for more than 10 years.</p>
+                    <h1>About</h1>
+                    <p>We offer the best prices for vactions, hotels, and activities across the globe for more than 10 years. </p>
                 </div>
             </div>
         </header>
+        <!-- header -->
 
-        <section id = "contact" class = "py-4">
+        <!-- about section -->
+        <section id = "about" class = "py-4">
             <div class = "container">
                 <div class = "title-wrap">
-                    <span class = "sm-title">get in touch with us</span>
-                    <h2 class = "lg-title">contact us</h2>
+                    <span class = "sm-title">things to know about us</span>
+                    <h2 class = "lg-title">our story</h2>
                 </div>
 
-                <div class = "contact-row">
-                    <div class = "contact-left">
-                        <form class = "contact-form">
-                            <input type = "text" class = "form-control" placeholder="Your name">
-                            <input type = "email" class = "form-control" placeholder="Your email">
-                            <textarea rows = "4" class = "form-control" placeholder="Your message" style = "resize: none;"></textarea>
-                            <input type = "submit" class = "btn" value = "Send message">
-                        </form>
+                <div class = "about-row">
+                    <div class = "about-left my-2">
+                        <img src = "static/images/about-img.jpg" alt = "about img">
                     </div>
-                    <div class = "contact-right my-2">
-                        <div class = "contact-item">
-                            <span class = "contact-icon flex">
-                                <i class = "fa fa-phone-alt"></i>
-                            </span>
-                            <div>
-                                <span>Phone</span>
-                                <p class = "text">+01-584-886-009</p>
-                            </div>
+                    <div class = "about-right">
+                        <h2>10 Years of Experience</h2>
+                        <p class = "text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae vitae sed aperiam qui repudiandae earum voluptatem. Modi at inventore omnis veniam necessitatibus exercitationem vel nesciunt delectus ex officiis, culpa doloremque odit illo saepe placeat. Delectus consequuntur reprehenderit omnis accusantium officiis!</p>
+                        <p class = "text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique explicabo blanditiis quidem consequuntur qui quaerat fuga iste tenetur consequatur porro. Aliquam maiores alias doloribus at quisquam quo numquam perferendis. Odit!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- end of about section -->
+
+        <!-- facts section -->
+        <section id = "facts" class = "py-4 flex">
+            <div class = "container">
+                <div class = 'title-wrap'>
+                    <span class = "sm-title">know some facts about our agency</span>
+                    <h2 class = "lg-title">fun facts</h2>
+                </div>
+
+                <div class = "facts-row">
+                    <div class = "facts-item">
+                        <span class = "fas fa-camera-retro facts-icon"></span>
+                        <div class = "facts-info">
+                            <strong>1220</strong>
+                            <p class = "text">photos taken</p>
                         </div>
-                        <div class = "contact-item">
-                            <span class = "contact-icon flex">
-                                <i class = "fa fa-map-marked-alt"></i>
-                            </span>
-                            <div>
-                                <span>Address</span>
-                                <p class = "text">102 East 22nd Street, NY</p>
-                            </div>
+                    </div>
+
+                    <div class = "facts-item">
+                        <span class = "fas fa-umbrella-beach  facts-icon"></span>
+                        <div class = "facts-info">
+                            <strong>450</strong>
+                            <p class = "text">beaches visited</p>
                         </div>
-                        <div class = "contact-item">
-                            <span class = "contact-icon flex">
-                                <i class = "fa fa-envelope"></i>
-                            </span>
-                            <div>
-                                <span>Message</span>
-                                <p class = "text">info@wandersync.com</p>
-                            </div>
+                    </div>
+
+                    <div class = "facts-item">
+                        <span class = "fas fa-mountain facts-icon"></span>
+                        <div class = "facts-info">
+                            <strong>84</strong>
+                            <p class = "text">mountains climbed</p>
+                        </div>
+                    </div>
+
+                    <div class = "facts-item">
+                        <span class = "fas fa-ship facts-icon"></span>
+                        <div class = "facts-info">
+                            <strong>120</strong>
+                            <p class = "text">cruises organized</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        <!-- end of facts section -->
 
+
+        <!-- footer -->
         <footer class = "py-4">
             <div class = "container footer-row">
                 <div class = "footer-item">
-                    <a href = "{{ url_for('protected_area') }}" class = "site-brand">
+                    <a href = "{{ url_for('auth.protected_area') }}" class = "site-brand">
                         Wander<span>Sync</span>
                     </a>
                     <p class = "text">@Copyright WanderSync.Inc 2023. All rights reserved</p>
@@ -171,11 +195,6 @@
         </footer>
 
         <script src = "static/HomePage.js"></script>
-        <script>
+      </body>
 
-        </script>
-    </body>
 </html>
-
-
-
