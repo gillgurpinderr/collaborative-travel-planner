@@ -60,8 +60,7 @@ def index():
             handle_sign_up(request.form)
         else:
             handle_sign_in(request.form)
-
-        
+            
     index_html = render_template('index.html', message='Hello, World!', othera='aa')
     return index_html
 
@@ -84,7 +83,6 @@ def callback():
     request_session = requests.session()
     cached_session = cachecontrol.CacheControl(request_session)
     token_request = google.auth.transport.requests.Request(session=cached_session)
-
     id_info = id_token.verify_oauth2_token(
         id_token=credentials._id_token,
         request=token_request,
@@ -95,13 +93,7 @@ def callback():
     session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
     session["birthday"] = id_info.get("birthday")
-
-    print(id_info)
-    print("User Profile:")
-    print(f"Name: {session['name']}")
-    print(f"Email: {session['email']}")
-    print(f"ID: {session['google_id']}")    
-    print(f"Birthday: {session['birthday']}")
+    
     return redirect("/protected")
 
 # logout
