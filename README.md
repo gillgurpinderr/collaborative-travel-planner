@@ -1,4 +1,4 @@
-<img src="/static/WanderSync.jpeg">
+<img src="website/static/WanderSync.jpeg">
 
 # WanderSync
 
