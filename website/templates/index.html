@@ -55,13 +55,13 @@
             <form method="POST">
                 <h1>Sign In</h1>
                 <div class="social-icons">
-                    <a href="/login" class="icon"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="{{ url_for('auth.login') }}" class="icon"><i class="fab fa-google-plus-g"></i></a>
                 </div>
                 <span>or use your email password</span>
                 <input type="email" id="email" name="email" placeholder="Email">
                 <input type="password" id="password" name="password" placeholder="Password">
                 <a href="#">Forget Your Password?</a>
-                <button>Sign In</button>
+                <button href=''>Sign In</button>
             </form>
         </div>
         <div class="toggle-container-a">

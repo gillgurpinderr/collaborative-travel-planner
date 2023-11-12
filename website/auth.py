@@ -6,6 +6,9 @@ from flask import Blueprint, Flask, redirect, render_template, request, session,
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 from google.oauth2 import id_token
+from werkzeug.security import generate_password_hash, check_password_hash
+from .__init__ import db
+from .models import User
 
 auth = Blueprint('auth',__name__)
 
@@ -41,7 +44,14 @@ def handle_sign_up(form):
     elif len(password) < 6:
         flash('Password must be at least 5 characters.', category='error')
     else:
+        new_user = User(name=name, email=email, password=generate_password_hash(password, method='scrypt'))
+        print("a")
+        db.session.add(new_user)
+        print('b')
+        db.session.commit()
+        print('c')
         flash('Account created!', category='success')
+        return redirect(url_for('protected'))
         
 def handle_sign_in(form):
     email = form.get('email')
@@ -104,7 +114,8 @@ def logout():
 
 # protected area
 @auth.route("/protected")
-def protected_area():
+@login_is_required
+def protected():
     return render_template('protected.html')
 
 @auth.route('/recommendation')
