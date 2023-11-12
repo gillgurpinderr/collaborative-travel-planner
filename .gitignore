@@ -13,6 +13,7 @@
 /build
 /__pycache_
 /website/__pycache__
+/instance
 
 # misc
 .DS_Store
