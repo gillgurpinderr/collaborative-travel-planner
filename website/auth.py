@@ -2,15 +2,15 @@ import json
 import os
 import requests
 import google.auth.transport.requests
-from flask import Flask, redirect, render_template, request, session, abort, url_for, flash
+from flask import Blueprint, Flask, redirect, render_template, request, session, abort, url_for, flash
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 from google.oauth2 import id_token
 
-app = Flask(__name__)
-app.secret_key = "login" # secret key, i dont what this is used for, but error if not included
+auth = Blueprint('auth',__name__)
+# app.secret_key = "login" # secret key, i dont what this is used for, but error if not included
 
-with open('client_secret.json', 'r') as secret_json: # open json, r is read mode
+with open('website/client_secret.json', 'r') as secret_json: # open json, r is read mode
     client_secret = json.load(secret_json)
 GOOGLE_CLIENT_ID = client_secret['web']['client_id']
 
@@ -55,7 +55,7 @@ def handle_sign_in(form):
     else:
         flash('Signed in! Redirecting...', category='success')
     
-@app.route("/", methods=['GET', 'POST'])
+@auth.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         if 'name' in request.form:
@@ -68,14 +68,14 @@ def index():
     return index_html
 
 # redirect to google
-@app.route("/login")
+@auth.route("/login")
 def login():
     authorization_url, state = flow.authorization_url()
     session["state"] = state
     return redirect(authorization_url)
 
 # recieve data from google
-@app.route("/callback")
+@auth.route("/callback")
 def callback():
     flow.fetch_token(authorization_response=request.url)
 
@@ -107,27 +107,27 @@ def callback():
     return redirect("/protected")
 
 # logout
-@app.route("/logout")
+@auth.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("index"))
 
 # protected area
-@app.route("/protected")
+@auth.route("/protected")
 def protected_area():
     return render_template('protected.html')
 
-@app.route('/recommendation')
+@auth.route('/recommendation')
 def recommendation():
     return render_template('recommendation.html')
 
-@app.route('/about')
+@auth.route('/about')
 def about():
     return render_template('about.html')
 
-@app.route('/contact')
+@auth.route('/contact')
 def contact():
     return render_template('contact.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    auth.run(debug=True)

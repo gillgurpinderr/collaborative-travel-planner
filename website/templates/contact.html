@@ -3,25 +3,25 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>WanderSync</title>
+        <title>WanderSynch</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <!-- font awesome cdn -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+        <!-- fonts -->
         <link rel = "stylesheet" href = "static/fonts.css">
-
+        <!-- normalize css -->
         <link rel = "stylesheet" href = "static/normalize.css">
-
+        <!-- custom css -->
         <link rel = "stylesheet" href = "static/utility.css">
         <link rel = "stylesheet" href = "static/WanderSync.css">
         <link rel = "stylesheet" href = "static/responsive.css">
     </head>
     <body>
-
+        <!-- navbar  -->
         <nav class = "navbar">
             <div class = "container flex">
-                <a href = "{{ url_for('protected_area') }}" class = "site-brand">
+                <a href = "{{ url_for('auth.protected_area') }}" class = "site-brand">
                     Wander<span>Sync</span>
                 </a>
 
@@ -35,22 +35,24 @@
                    <ul class = "navbar-nav">
                         <li class = "nav-item">
 
-                            <a href = "{{ url_for('protected_area') }}" class = 'nav-link'>Home</a>
+                            <a href = "{{ url_for('auth.protected_area') }}" class = 'nav-link'>Home</a>
                         </li>
                         <li class = "nav-item">
-                            <a href = "{{ url_for('recommendation') }}" class = 'nav-link'>Recommendations</a>
+                            <a href = "{{ url_for('auth.recommendation') }}" class = 'nav-link'>Recommendations</a>
                         </li>
                         <li class = "nav-item">
-                            <a href="{{ url_for('about') }}" class="nav-link">About</a>
+                            <a href="{{ url_for('auth.about') }}" class="nav-link">About</a>
                         </li>
                         <li class = "nav-item">
-                            <a href = "{{ url_for('contact') }}" class = 'nav-link'>Contact</a>
+                            <a href = "{{ url_for('auth.contact') }}" class = 'nav-link'>Contact</a>
                         </li>
                    </ul>
                 </div>
             </div>
         </nav>
+        <!-- end of navbar  -->
 
+        <!-- header -->
         <header class = "flex header-sm">
             <div class = "container">
                 <div class = "header-title">
@@ -59,7 +61,9 @@
                 </div>
             </div>
         </header>
+        <!-- header -->
 
+        <!-- contact section -->
         <section id = "contact" class = "py-4">
             <div class = "container">
                 <div class = "title-wrap">
@@ -108,12 +112,15 @@
                 </div>
             </div>
         </section>
+        <!-- end of contact section -->
 
+
+        <!-- footer -->
         <footer class = "py-4">
             <div class = "container footer-row">
                 <div class = "footer-item">
-                    <a href = "{{ url_for('protected_area') }}" class = "site-brand">
-                        Wander<span>Sync</span>
+                    <a href = "{{ url_for('auth.protected_area') }}" class = "site-brand">
+                        Wander<span>Sych</span>
                     </a>
                     <p class = "text">@Copyright WanderSync.Inc 2023. All rights reserved</p>
                 </div>
@@ -169,13 +176,12 @@
                 </div>
             </div>
         </footer>
+        <!-- end of footer -->
 
+        <!-- js -->
         <script src = "static/HomePage.js"></script>
         <script>
 
         </script>
     </body>
 </html>
-
-
-
