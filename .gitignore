@@ -11,6 +11,11 @@
 
 # production
 /build
+/__pycache_
+/website/__pycache__
+/instance
+/env
+/public
 
 # misc
 .DS_Store
