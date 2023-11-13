@@ -1,6 +1,7 @@
 from os import path
 import os
 from flask import Flask
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -16,12 +17,12 @@ def create_app():
     from .auth import auth
     app.register_blueprint(auth, url_prefix='/')
  
-    create_database(app)
+    class User(db.Model, UserMixin):
+        email = db.Column(db.String(320), primary_key=True)
+        password = db.Column(db.String(64))
+        name = db.Column(db.String(150))
 
+    with app.app_context():
+        db.create_all()
+        
     return app
-
-def create_database(app):
-    if not path.exists('instance/' + DB_NAME):
-        with app.app_context():
-            db.create_all()
-        print('Created database!')
