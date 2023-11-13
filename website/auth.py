@@ -49,7 +49,6 @@ def handle_sign_up(form):
             db.session.add(new_user)
             db.session.commit()
             flash('Account created!', category='success')
-            return redirect(url_for('auth.contact'))
         except Exception as e:
             flash(f'Error creating account: {str(e)}', category='error')
         
