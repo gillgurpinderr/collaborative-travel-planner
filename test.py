@@ -68,7 +68,7 @@ def callback():
     session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
     session["birthday"] = id_info.get("birthday")
-
+ 
     print(id_info)
     print("User Profile:")
     print(f"Name: {session['name']}")
