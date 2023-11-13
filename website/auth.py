@@ -45,13 +45,14 @@ def handle_sign_up(form):
         flash('Password must be at least 5 characters.', category='error')
     else:
         new_user = User(name=name, email=email, password=generate_password_hash(password, method='scrypt'))
-        print("a")
-        db.session.add(new_user)
-        print('b')
-        db.session.commit()
-        print('c')
-        flash('Account created!', category='success')
-        return redirect(url_for('protected'))
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Account created!', category='success')
+            return redirect(url_for('auth.contact'))
+        except Exception as e:
+            flash(f'Error creating account: {str(e)}', category='error')
+        
         
 def handle_sign_in(form):
     email = form.get('email')
@@ -62,7 +63,7 @@ def handle_sign_in(form):
         flash('Incorrect password. Hint: passwords are greater than 5 characters.', category='error')
     else:
         flash('Signed in! Redirecting...', category='success')
-    
+    return redirect("auth.contact")
 @auth.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -104,17 +105,16 @@ def callback():
     session["email"] = id_info.get("email")
     session["birthday"] = id_info.get("birthday")
     
-    return redirect("/protected")
+    return redirect("auth.contact")
 
 # logout
 @auth.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("index"))
+    return redirect(url_for("auth.index"))
 
 # protected area
 @auth.route("/protected")
-@login_is_required
 def protected():
     return render_template('protected.html')
 
