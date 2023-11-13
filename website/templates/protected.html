@@ -23,7 +23,7 @@
     <!-- navbar  -->
         <nav class = "navbar">
             <div class = "container flex">
-                <a href = "{{ url_for('protected_area') }}" class = "site-brand">
+                <a href = "{{ url_for('auth.protected') }}" class = "site-brand">
                     Wander<span>Sync</span>
                 </a>
 
@@ -37,17 +37,17 @@
                     <ul class = "navbar-nav">
                         <li class = "nav-item">
 
-                            <a href = "{{ url_for('protected_area') }}" class = 'nav-link'>Home</a>
+                            <a href = "{{ url_for('auth.protected') }}" class = 'nav-link'>Home</a>
                         </li>
                         <li class = "nav-item">
-                            <a href = "{{ url_for('recommendation') }}" class = 'nav-link'>Recommendations</a>
+                            <a href = "{{ url_for('auth.recommendation') }}" class = 'nav-link'>Recommendations</a>
                         </li>
 
                         <li class = "nav-item">
-                            <a href="{{ url_for('about') }}" class="nav-link">About</a>
+                            <a href="{{ url_for('auth.about') }}" class="nav-link">About</a>
                         </li>
                         <li class = "nav-item">
-                            <a href = "{{ url_for('contact') }}" class = 'nav-link'>Contact</a>
+                            <a href = "{{ url_for('auth.contact') }}" class = 'nav-link'>Contact</a>
                         </li>
                     </ul>
                 </div>
@@ -218,7 +218,7 @@
         <footer class = "py-4">
             <div class = "container footer-row">
                 <div class = "footer-item">
-                    <a href = "{{ url_for('protected_area') }}" class = "site-brand">
+                    <a href = "{{ url_for('auth.protected') }}" class = "site-brand">
                         Wander<span>Sync</span>
                     </a>
                     <p class = "text">@Copyright WanderSync.Inc 2023. All rights reserved</p>
