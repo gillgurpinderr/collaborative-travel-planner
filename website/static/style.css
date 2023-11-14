@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: #f0f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0; /* Remove default body margin */
+    position: relative;
+    overflow: hidden; /* Hide body overflow */
+}
+
+.container-a {
+    background-color: #f5f5f5;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    width: 100%; /* Full width */
+    min-height: 100vh; /* Full height */
+    display: flex; /* Align children vertically */
+    align-items: center; /* Center children vertically */
+}
+
+.container-a p {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    margin: 20px 0;
+}
+
+.container-a span {
+    font-size: 14px;
+}
+
+.container-a a {
+    color: #2d5ca8;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0 10px;
+    transition: color 0.3s ease-in-out;
+}
+
+.container-a a:hover {
+    color: #ffffff;
+}
+
+.container-a button {
+    background-color: #1c3464;
+    color: #fff;
+    font-size: 14px;
+    padding: 12px 40px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 15px;
+    cursor: pointer;
+  
+}
+
+.container-a button.hidden {
+    background-color: transparent;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+}
+
+.container-a form {
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    height: 100%;
+}
+
+
+
+.background-logo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/Users/muhammadusman/Desktop/Modern-Login/logo.png') center/cover no-repeat; /* Replace with your actual logo path */
+    z-index: -1; /* Send it to the background */
+    opacity: 0.1; /* Adjust the opacity as needed */
+    filter: blur(8px); /* Add a blur effect */
+}
+
+/* Rest of your existing CSS remains unchanged */
+
+
+
+/* Rest of the CSS remains unchanged */
+
+
+
+.container-a input {
+    background-color: #eee;
+    border: none;
+    margin: 10px 0;
+    padding: 12px 15px;
+    font-size: 14px;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+}
+
+/* Rest of the CSS remains unchanged */
+
+
+.form-container-a {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in{
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container-a.active .sign-in{
+    transform: translateX(100%);
+}
+
+.sign-up{
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container-a.active .sign-up{
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: move 0.6s;
+}
+
+@keyframes move{
+    0%, 49.99%{
+        opacity: 0;
+        z-index: 1;
+    }
+    50%, 100%{
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+.social-icons{
+    margin: 20px 0;
+}
+
+.social-icons a{
+    border: 1px solid #ccc;
+    border-radius: 20%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 3px;
+    width: 40px;
+    height: 40px;
+}
+
+.toggle-container-a {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.6s ease-in-out;
+    border-radius: 150px 0 0 100px;
+    z-index: 1000;
+}
+
+.container-a.active .toggle-container-a {
+    transform: translateX(-100%);
+    border-radius: 0 150px 100px 0;
+}
+
+.toggle{
+    background-color: #1c3464;
+    height: 100%;
+    background: linear-gradient(to right, #1c3464, #1c3464);
+    color: #fff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
+}
+
+.container-a.active .toggle{
+    transform: translateX(50%);
+}
+
+.toggle-panel{
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 30px;
+    text-align: center;
+    top: 0;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
+}
+
+.toggle-left{
+    transform: translateX(-200%);
+}
+
+.container-a.active .toggle-left{
+    transform: translateX(0);
+}
+
+.toggle-right{
+    right: 0;
+    transform: translateX(0);
+}
+
+.container-a.active .toggle-right{
+    transform: translateX(200%);
+}
+
+.alert {
+    bottom: 250px;
+    left: 100px;
+    z-index: 1000;
+}
