@@ -132,6 +132,7 @@ def logout():
 
 # protected area
 @auth.route("/protected")
+@login_is_required
 def protected():
     return render_template('protected.html')
 
