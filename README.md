@@ -1,4 +1,3 @@
-
 <img src="/static/WanderSync.jpeg">
 
 # WanderSync
