@@ -1,5 +1,6 @@
 import json
 import os
+from flask_login import login_user
 import requests
 import google.auth.transport.requests
 from flask import Blueprint, Flask, redirect, render_template, request, session, abort, url_for, flash
@@ -8,10 +9,9 @@ from pip._vendor import cachecontrol
 from google.oauth2 import id_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from .__init__ import db
-from .models import User
+from .__init__ import User
 
 auth = Blueprint('auth',__name__)
-
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # this will allow OAuth over insecure HTTP connection
 
 with open('website/client_secret.json', 'r') as secret_json: # open json, r is read mode
@@ -37,7 +37,11 @@ def handle_sign_up(form):
     name = form.get('name')
     email = form.get('email')
     password = form.get('password')
-    if len(email) < 6:
+    
+    user = User.query.filter_by(email=email).first()
+    if user:
+        flash('Email already exists.', category='error')
+    elif len(email) < 6:
         flash('Email must be greater than 5 characters.', category='error')
     elif len(name) < 2:
         flash('That is not your name.', category='error')
@@ -45,34 +49,48 @@ def handle_sign_up(form):
         flash('Password must be at least 5 characters.', category='error')
     else:
         new_user = User(name=name, email=email, password=generate_password_hash(password, method='scrypt'))
-        print("a")
-        db.session.add(new_user)
-        print('b')
-        db.session.commit()
-        print('c')
-        flash('Account created!', category='success')
-        return redirect(url_for('protected'))
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Account created!', category='success')
+        except Exception as e:
+            flash(f'Error creating account: {str(e)}', category='error')
         
 def handle_sign_in(form):
     email = form.get('email')
     password = form.get('password')
-    if len(email) < 6:
-        flash('Incorrect email.', category='error')
-    elif len(password) < 6:
-        flash('Incorrect password. Hint: passwords are greater than 5 characters.', category='error')
-    else:
-        flash('Signed in! Redirecting...', category='success')
-    
+        
+    user = User.query.filter_by(email=email).first() # filter by email, use first result (if more than 1)
+    try:
+        if user:
+            if check_password_hash(user.password, password):
+                flash('Signed in! Redirecting...', category='success')
+                return redirect("/protected")
+            else:
+                flash('Incorrect password. Hint: passwords are greater than 5 characters.', category='error')
+                return None
+        else:
+            flash('Email does not exist.', category='error')
+            return None
+    except:
+        return None
+
 @auth.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         if 'name' in request.form:
-            handle_sign_up(request.form)
+            html = handle_sign_up(request.form)
         else:
-            handle_sign_in(request.form)
+            html = handle_sign_in(request.form)
             
-    index_html = render_template('index.html', message='Hello, World!', othera='aa')
-    return index_html
+        if html == None:
+            index_html = render_template('index.html', message='Hello, World!', othera='aa')
+            return index_html
+        else:
+            return html
+    else:
+        index_html = render_template('index.html', message='Hello, World!', othera='aa')
+        return index_html
 
 # redirect to google
 @auth.route("/login")
@@ -103,24 +121,17 @@ def callback():
     session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
     session["birthday"] = id_info.get("birthday")
- 
-    print(id_info)
-    print("User Profile:")
-    print(f"Name: {session['name']}")
-    print(f"Email: {session['email']}")
-    print(f"ID: {session['google_id']}")    
-    print(f"Birthday: {session['birthday']}")
+    
     return redirect("/protected")
 
 # logout
 @auth.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("index"))
+    return redirect(url_for("auth.index"))
 
 # protected area
 @auth.route("/protected")
-@login_is_required
 def protected():
     return render_template('protected.html')
 
