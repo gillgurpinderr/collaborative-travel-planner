@@ -24,15 +24,6 @@ flow = Flow.from_client_secrets_file(
     redirect_uri="http://127.0.0.1:5000/callback"
     )
 
-# store google id in session
-def login_is_required(function):
-    def wrapper(*args, **kwargs):
-        if "google_id" not in session:
-            return abort(401)  # authorization required
-        else:
-            return function()
-    return wrapper
-
 def handle_sign_up(form):
     name = form.get('name')
     email = form.get('email')
@@ -40,7 +31,7 @@ def handle_sign_up(form):
     
     user = User.query.filter_by(email=email).first()
     if user:
-        flash('Email already exists.', category='error')
+        flash('Email already exists. Please login with Google if your account was created with Google.', category='error')
     elif len(email) < 6:
         flash('Email must be greater than 5 characters.', category='error')
     elif len(name) < 2:
@@ -63,7 +54,9 @@ def handle_sign_in(form):
     user = User.query.filter_by(email=email).first() # filter by email, use first result (if more than 1)
     try:
         if user:
-            if check_password_hash(user.password, password):
+            if user.password == None:
+                flash('Please login with Google.', category='error')
+            elif check_password_hash(user.password, password):
                 flash('Signed in! Redirecting...', category='success')
                 return redirect("/protected")
             else:
@@ -118,10 +111,19 @@ def callback():
     )
 
     session["google_id"] = id_info.get("sub")
+    print(session["google_id"])
     session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
     session["birthday"] = id_info.get("birthday")
     
+    user = User.query.filter_by(email=session["email"]).first()
+    if not user:
+        new_user = User(name=session["name"], email=session["email"])
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+        except Exception as e:
+            flash(f'Error logging in: {str(e)}', category='error')
     return redirect(url_for("auth.protected"))
 
 # logout
