@@ -122,7 +122,7 @@ def callback():
     session["email"] = id_info.get("email")
     session["birthday"] = id_info.get("birthday")
     
-    return redirect("auth.contact")
+    return redirect(url_for("auth.protected"))
 
 # logout
 @auth.route("/logout")
@@ -132,7 +132,6 @@ def logout():
 
 # protected area
 @auth.route("/protected")
-@login_is_required
 def protected():
     return render_template('protected.html')
 
