@@ -31,7 +31,7 @@ def login_is_required(func):
         if 'logged_in' not in session:
             return redirect('/')
         else:
-            return func(*args, **kwargs)
+            return func()
     return function
 
 def handle_sign_up(form):
@@ -67,7 +67,7 @@ def handle_sign_in(form):
             if user.password == None:
                 flash('Please login with Google.', category='error')
             elif check_password_hash(user.password, password):
-                flash('Signed in! Redirecting...', category='success')
+                # flash('Signed in! Redirecting...', category='success')
                 session['logged_in'] = True
                 return redirect("/protected")
             else:
