@@ -29,7 +29,7 @@ def login_is_required(func):
     @wraps(func)
     def function(*args, **kwargs):
         if 'logged_in' not in session:
-            return redirect('/')
+            return redirect(url_for('auth.index'))
         else:
             return func()
     return function
@@ -69,7 +69,7 @@ def handle_sign_in(form):
             elif check_password_hash(user.password, password):
                 # flash('Signed in! Redirecting...', category='success')
                 session['logged_in'] = True
-                return redirect("/protected")
+                return redirect(url_for("auth.protected"))
             else:
                 flash('Incorrect password. Hint: passwords are greater than 5 characters.', category='error')
                 return None
@@ -79,7 +79,7 @@ def handle_sign_in(form):
     except:
         return None
 
-@auth.route("/", methods=['GET', 'POST'])
+@auth.route("/auth", methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         if 'name' in request.form:
@@ -88,12 +88,12 @@ def index():
             html = handle_sign_in(request.form)
             
         if html == None:
-            index_html = render_template('index.html', message='Hello, World!', othera='aa')
+            index_html = render_template('index.html')
             return index_html
         else:
             return html
     else:
-        index_html = render_template('index.html', message='Hello, World!', othera='aa')
+        index_html = render_template('index.html')
         return index_html
 
 # redirect to google
@@ -144,7 +144,7 @@ def logout():
     return redirect(url_for("auth.index"))
 
 # protected area
-@auth.route("/protected")
+@auth.route("/")
 @login_is_required
 def protected():
     return render_template('protected.html')
