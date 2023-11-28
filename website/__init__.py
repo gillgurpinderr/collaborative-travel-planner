@@ -19,7 +19,6 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(150))
     key_phrase = db.Column(db.String(200), nullable = True)
     token = db.Column(db.String(200), nullable = True)
-
     
 def create_app():
     app = Flask(__name__)
