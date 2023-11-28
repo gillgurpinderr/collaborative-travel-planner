@@ -3,6 +3,7 @@ import json
 import os
 import requests
 import google.auth.transport.requests
+import secrets
 from flask import Blueprint, redirect, render_template, request, session, abort, url_for, flash
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
@@ -10,7 +11,9 @@ from google.oauth2 import id_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from .__init__ import db
 from .__init__ import User
+from random_word import RandomWords
 
+r = RandomWords()
 auth = Blueprint('auth',__name__)
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # this will allow OAuth over insecure HTTP connection
 
@@ -54,6 +57,10 @@ def handle_sign_up(form):
             db.session.add(new_user)
             db.session.commit()
             flash('Account created!', category='success')
+            key_phrase = f"{r.get_random_word()} {r.get_random_word()} {r.get_random_word()}"
+            new_user.key_phrase = key_phrase
+            db.session.commit()
+            flash(f'NOTE Key Phrase: {key_phrase}', category='success')
         except Exception as e:
             flash(f'Error creating account: {str(e)}', category='error')
         
@@ -163,3 +170,45 @@ def about():
 @login_is_required
 def contact():
     return render_template('contact.html')
+
+
+import secrets
+
+@auth.route('/forgot', methods=['GET', 'POST'])
+def forgot():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        key_phrase = request.form.get('password') # "password" in this case is key phrase
+        user = User.query.filter_by(email=email).first()
+
+        if user:
+            if key_phrase == user.key_phrase:
+                token = secrets.token_urlsafe(16)
+                user.token = token
+                db.session.commit()
+                return redirect(url_for('auth.reset', email=email, token=token))
+            else: 
+                flash('Incorrect key phrase.', category='error')
+        else:
+            flash('Email not found. Please try again.', category='error')
+
+    return render_template('forgot.html')
+
+@auth.route('/reset/<email>/<token>', methods=['GET', 'POST'])
+def reset(email, token):
+    user = User.query.filter_by(email=email, token=token).first()
+    if not user:
+        abort(404)
+
+    if request.method == 'POST':
+        new_password = request.form.get('password')
+        if len(new_password) < 6:
+            flash('Password must be at least 5 characters.', category='error')
+        else:
+            user.password = generate_password_hash(new_password, method='scrypt')
+            user.token = None
+            db.session.commit()
+            flash('Your password has been reset!', category='success')
+            return redirect(url_for('auth.index'))
+
+    return render_template('reset.html')
