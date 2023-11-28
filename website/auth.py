@@ -1,3 +1,4 @@
+from functools import wraps
 import json
 import os
 from flask_login import login_user
@@ -23,6 +24,15 @@ flow = Flow.from_client_secrets_file(
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
     redirect_uri="http://127.0.0.1:5000/callback"
     )
+
+def login_is_required(func):
+    @wraps(func)
+    def function(*args, **kwargs):
+        if 'logged_in' not in session:
+            return redirect('/')
+        else:
+            return func(*args, **kwargs)
+    return function
 
 def handle_sign_up(form):
     name = form.get('name')
@@ -58,6 +68,7 @@ def handle_sign_in(form):
                 flash('Please login with Google.', category='error')
             elif check_password_hash(user.password, password):
                 flash('Signed in! Redirecting...', category='success')
+                session['logged_in'] = True
                 return redirect("/protected")
             else:
                 flash('Incorrect password. Hint: passwords are greater than 5 characters.', category='error')
@@ -111,10 +122,8 @@ def callback():
     )
 
     session["google_id"] = id_info.get("sub")
-    print(session["google_id"])
     session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
-    session["birthday"] = id_info.get("birthday")
     
     user = User.query.filter_by(email=session["email"]).first()
     if not user:
@@ -124,6 +133,8 @@ def callback():
             db.session.commit()
         except Exception as e:
             flash(f'Error logging in: {str(e)}', category='error')
+            
+    session['logged_in'] = True
     return redirect(url_for("auth.protected"))
 
 # logout
@@ -134,17 +145,21 @@ def logout():
 
 # protected area
 @auth.route("/protected")
+@login_is_required
 def protected():
     return render_template('protected.html')
 
 @auth.route('/recommendation')
+@login_is_required
 def recommendation():
     return render_template('recommendation.html')
 
 @auth.route('/about')
+@login_is_required
 def about():
     return render_template('about.html')
 
 @auth.route('/contact')
+@login_is_required
 def contact():
     return render_template('contact.html')
