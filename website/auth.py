@@ -51,6 +51,12 @@ def handle_sign_up(form):
         flash('That is not your name.', category='error')
     elif len(password) < 6:
         flash('Password must be at least 5 characters.', category='error')
+    elif len(email) > 255:
+        flash('Email cannot exceed 255 characters.', category='error')
+    elif len(name) > 99:
+        flash('That is not your name.', category='error')
+    elif len(password) > 64:
+        flash('Password cannot exceed 64 characters.', category='error')
     else:
         new_user = User(name=name, email=email, password=generate_password_hash(password, method='scrypt'))
         try:
@@ -78,7 +84,7 @@ def handle_sign_in(form):
                 session['logged_in'] = True
                 return redirect(url_for("auth.protected"))
             else:
-                flash('Incorrect password. Hint: passwords are greater than 5 characters.', category='error')
+                flash('Incorrect password. Hint: passwords are greater than 5 characters and less than 64 characters.', category='error')
                 return None
         else:
             flash('Email does not exist.', category='error')
@@ -204,6 +210,8 @@ def reset(email, token):
         new_password = request.form.get('password')
         if len(new_password) < 6:
             flash('Password must be at least 5 characters.', category='error')
+        elif len(new_password) > 64:
+            flash('Password must not exceed 64 characters.', category='error')
         else:
             user.password = generate_password_hash(new_password, method='scrypt')
             user.token = None
