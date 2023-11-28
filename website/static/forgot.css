@@ -1,0 +1,59 @@
+body {
+    font-family: 'Open Sans';
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+  }
+  .forgot-password-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    width: 50vh
+  }
+  .forgot-password-form h2 {
+    text-align: center;
+  }
+  .forgot-password-form input[type="email"] {
+    margin-top: 5px;
+    width: 96%;
+    padding: 10px;
+    padding-bottom: 3px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+  }
+  .forgot-password-form input[type="password"] {
+    margin-top: 5px;
+    width: 96%;
+    padding: 10px;
+    padding-right: px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+  }
+  .forgot-password-form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 3px;
+    border: none;
+    background-color: #1c3464;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.35s, opacity 0.35s;
+  }
+  
+  .forgot-password-form input[type="submit"]:hover {
+    opacity: 0.7;
+  }
+  
+  .forgot-password-form input[id="password"] {
+    width:96%;
+    margin-bottom: 10px;
+  }
+  
