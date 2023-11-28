@@ -14,9 +14,9 @@ class Itinerary(db.Model):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(320), unique=True, nullable=False)
-    password = db.Column(db.String(64))
-    name = db.Column(db.String(150))
+    email = db.Column(db.String(256), unique=True, nullable=False)
+    password = db.Column(db.String(65))
+    name = db.Column(db.String(100))
     key_phrase = db.Column(db.String(200), nullable = True)
     token = db.Column(db.String(200), nullable = True)
     
