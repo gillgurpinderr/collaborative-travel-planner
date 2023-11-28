@@ -1,10 +1,9 @@
 from functools import wraps
 import json
 import os
-from flask_login import login_user
 import requests
 import google.auth.transport.requests
-from flask import Blueprint, Flask, redirect, render_template, request, session, abort, url_for, flash
+from flask import Blueprint, redirect, render_template, request, session, abort, url_for, flash
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 from google.oauth2 import id_token
@@ -17,6 +16,7 @@ os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # this will allow OAuth over ins
 
 with open('website/client_secret.json', 'r') as secret_json: # open json, r is read mode
     client_secret = json.load(secret_json)
+    
 GOOGLE_CLIENT_ID = client_secret['web']['client_id']
 client_secrets_file = os.path.join(os.path.dirname(__file__), "client_secret.json")
 flow = Flow.from_client_secrets_file(
