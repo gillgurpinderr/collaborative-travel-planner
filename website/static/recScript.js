@@ -44,6 +44,15 @@ function deleteMember(button) {
     li.remove();
 };
 
+function validateForm() {
+    var members = document.querySelectorAll("#membersList li");
+    if (members.length === 0) {
+        alert("Please add at least one member.");
+        return false; // Prevent form submission
+    }
+    return true; // Allow form submission
+}
+
 // Function to Edit a Member
 function editMember(button) {
     var li = button.parentElement;
