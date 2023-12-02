@@ -212,6 +212,8 @@ def reset(email, token):
             flash('Password must be at least 5 characters.', category='error')
         elif len(new_password) > 64:
             flash('Password must not exceed 64 characters.', category='error')
+        elif new_password == user.password:
+            flash('Password cannot be the same as previous password.', category='error')            
         else:
             user.password = generate_password_hash(new_password, method='scrypt')
             user.token = None # clear token once user has reset password
