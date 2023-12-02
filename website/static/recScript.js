@@ -50,8 +50,33 @@ function validateForm() {
         alert("Please add at least one member.");
         return false; // Prevent form submission
     }
+    var startDateString = document.getElementById('startDate').value;
+    var endDateString = document.getElementById('endDate').value;
+
+    // Splitting date string into components
+    var startDateComponents = startDateString.split('-');
+    var endDateComponents = endDateString.split('-');
+
+    // Creating date objects using components (year, month - 1, day)
+    var startDate = new Date(
+        startDateComponents[0],
+        startDateComponents[1] - 1,
+        startDateComponents[2]
+    );
+    var endDate = new Date(
+        endDateComponents[0],
+        endDateComponents[1] - 1,
+        endDateComponents[2]
+    );
+
+    if (startDate > endDate) {
+        document.getElementById('dateError').innerText = 'End date cannot be earlier than the start date.';
+        return false; // Prevent form submission
+    }
+
     return true; // Allow form submission
 }
+
 
 // Function to Edit a Member
 function editMember(button) {
