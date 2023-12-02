@@ -2,6 +2,7 @@
 /build
 /__pycache_
 /website/__pycache__
+/website/secret.py
 /instance
 /env
 /public
