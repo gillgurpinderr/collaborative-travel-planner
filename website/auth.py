@@ -81,6 +81,9 @@ def handle_sign_in(form):
             elif check_password_hash(user.password, password): # method from werkzeug lib, that matches PW in form to encrypted PW in DB
                 # flash('Signed in! Redirecting...', category='success')
                 session['logged_in'] = True # keep track of user being logged in till log out 
+                print(session['logged_in'])
+                session['name'] = user.name
+                session['email'] = user.email
                 return redirect(url_for("auth.protected")) # since logged in now true, user may access protected pages
             else:
                 flash('Incorrect password. Hint: passwords are greater than 5 characters and less than 64 characters.', category='error')
@@ -161,7 +164,13 @@ def logout():
 @auth.route("/")
 @login_is_required
 def protected():
-    return render_template('protected.html')
+    try:
+        name = f", "
+        name += str(session['name'])
+    except:
+        
+        pass
+    return render_template('protected.html', name=name)
 
 @auth.route('/recommendation')
 @login_is_required
