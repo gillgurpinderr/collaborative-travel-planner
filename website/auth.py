@@ -12,6 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .__init__ import db
 from .__init__ import User
 from random_word import RandomWords
+from .secret import GOOGLE_API_KEY
 
 r = RandomWords() # this object generates as the name suggests, random words; used for key phrase generation
 auth = Blueprint('auth',__name__) # basically, creating the auth module of webpage
@@ -72,7 +73,7 @@ def handle_sign_up(form):
 def handle_sign_in(form):
     email = form.get('email')
     password = form.get('password')
-        
+    
     user = User.query.filter_by(email=email).first() # filter by email, use first result (if more than 1)
     try:
         if user:
@@ -81,7 +82,6 @@ def handle_sign_in(form):
             elif check_password_hash(user.password, password): # method from werkzeug lib, that matches PW in form to encrypted PW in DB
                 # flash('Signed in! Redirecting...', category='success')
                 session['logged_in'] = True # keep track of user being logged in till log out 
-                print(session['logged_in'])
                 session['name'] = user.name
                 session['email'] = user.email
                 return redirect(url_for("auth.protected")) # since logged in now true, user may access protected pages
@@ -172,15 +172,25 @@ def protected():
         pass
     return render_template('protected.html', name=name)
 
-@auth.route('/recommendation')
+@auth.route('/recommendation', methods=['GET', 'POST'])
 @login_is_required
 def recommendation():
-    return render_template('recommendation.html')
+    if request.method == 'POST':
+        form = request.form    
+        first_name = form.get('firstName')
+        last_name = form.get('lastName')
+        start_date = form.get('startDate')
+        end_date = form.get('endDate')
+        destination = form.get('destination')
+        print(f"{first_name} {last_name} {start_date} {end_date} {destination}")    
+        return redirect(url_for('auth.recommendation_results'))
+        
+    return render_template('recommendation.html', api_key=GOOGLE_API_KEY)
 
 @auth.route('/results')
 @login_is_required
 def recommendation_results():
-    return render_template('recommendations_result.html')
+    return render_template('recommendations_results.html')
 
 @auth.route('/about')
 @login_is_required
