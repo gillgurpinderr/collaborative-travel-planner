@@ -14,5 +14,5 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(256), unique=True, nullable=False)
     password = db.Column(db.String(65))
     name = db.Column(db.String(100))
-    key_phrase = db.Column(db.String(200), nullable = True)
-    token = db.Column(db.String(200), nullable = True)
+    key_phrase = db.Column(db.String(200), nullable=True)
+    token = db.Column(db.String(200), nullable=True)
