@@ -177,6 +177,11 @@ def protected():
 def recommendation():
     return render_template('recommendation.html')
 
+@auth.route('/results')
+@login_is_required
+def recommendation_results():
+    return render_template('recommendations_result.html')
+
 @auth.route('/about')
 @login_is_required
 def about():
