@@ -6,6 +6,8 @@
 /env
 /public
 /myenv
+/templates
+/static
 
 .DS_Store
 .env.local
@@ -20,3 +22,6 @@ client_secret.json
 
 test.py
 test2.py
+test3.py
+test4.py
+test5.py
