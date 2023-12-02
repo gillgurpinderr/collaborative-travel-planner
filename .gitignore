@@ -8,6 +8,7 @@
 /myenv
 /templates
 /static
+/test
 
 .DS_Store
 .env.local
