@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendation Page - Group Travel Planner</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/recStyle.css"> <!-- Link to your CSS file -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&libraries=places"></script>
+
+    <!-- Add the improved styles here -->
+    <style>
+          body {
+            background-color: #0b2451; /* Set the background color to blue (#6495ED) */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        :root {
+            --green: #1c3464;
+            --light-grey: #583434;
+            --dark: #0e1010;
+            --trans: all 0.3s ease-in-out;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: transparent;
+            padding: 1rem 0;
+            z-index: 999;
+        }
+
+        button.btn-primary {
+            background-color: var(--green);
+            color: #fff;
+            transition: background-color var(--trans);
+        }
+
+        button.btn-primary:hover {
+            background-color: var(--dark);
+        }
+
+        .popup-overlay {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .popup-content {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            transition: background-color var(--trans);
+        }
+
+        .popup-content:hover {
+            box-shadow: 0 0 18px -4px rgba(109, 109, 109, 0.64);
+        }
+
+        .close-btn {
+            color: var(--dark);
+            transition: color var(--trans);
+        }
+
+        .close-btn:hover {
+            color: var(--green);
+        }
+
+        .btn-secondary {
+            background-color: var(--dark);
+            color: #fff;
+            transition: background-color var(--trans);
+        }
+
+        .btn-secondary:hover {
+            background-color: #1c3464;
+        }
+
+        .btn-success {
+            background-color: var(--green);
+            color: #fff;
+            transition: background-color var(--trans);
+        }
+
+        .btn-success:hover {
+            background-color: var(--dark);
+        }
+
+        @media screen and (max-width: 460px) {
+            .featured-item-content {
+                -webkit-transform: translateY(68%);
+                -ms-transform: translateY(68%);
+                transform: translateY(68%);
+            }
+        }
+
+        @media screen and (min-width: 678px) {
+            .test-item::after {
+                left: 4rem;
+                -webkit-transform: translateX(0);
+                -ms-transform: translateX(0);
+                transform: translateX(0);
+            }
+
+            .test-item-info {
+                left: 1rem;
+                -webkit-transform: translateX(0);
+                -ms-transform: translateX(0);
+                transform: translateX(0);
+                text-align: left;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            .header-title p {
+                font-size: 1.4rem;
+            }
+
+            .featured-row,
+            .services-row,
+            .footer-row {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+
+            .featured-item,
+            .services-item {
+                margin: 0;
+            }
+
+            .footer-row {
+                text-align: left;
+            }
+
+            .social-links {
+                -webkit-box-pack: start;
+                -ms-flex-pack: start;
+                justify-content: start;
+            }
+
+            .social-links li:nth-child(1) {
+                margin-left: 0;
+            }
+
+            .subscribe-form form {
+                -webkit-box-align: start;
+                -ms-flex-align: start;
+                align-items: flex-start;
+            }
+
+            .gallery-row,
+            .popular-row,
+            .blog-row,
+            .facts-row {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+
+            .gallery-item {
+                margin: 0;
+            }
+
+            .popular-row,
+            .facts-row {
+                gap: 0;
+            }
+
+            .facts-row {
+                -webkit-column-gap: 5rem;
+                -moz-column-gap: 5rem;
+                column-gap: 5rem;
+            }
+        }
+
+        @media screen and (min-width: 992px) {
+            .header-title h1 {
+                font-size: 4rem;
+            }
+
+            .header-form form {
+                -webkit-box-orient: horizontal;
+                -webkit-box-direction: normal;
+                -ms-flex-direction: row;
+                flex-direction: row;
+                -webkit-box-align: stretch;
+                -ms-flex-align: stretch;
+                align-items: stretch;
+            }
+
+            .header-form .form-control,
+            .header-form .btn {
+                margin: 0 0.5rem;
+            }
+
+            #navbar-show-btn {
+                display: none;
+            }
+
+            #navbar-collapse {
+                display: block !important;
+                background-color: transparent;
+                -webkit-transform: translateX(0);
+                -ms-transform: translateX(0);
+                transform: translateX(0);
+                height: auto;
+                padding: 0;
+                position: static;
+                width: 100%;
+            }
+
+            #navbar-close-btn {
+                display: none;
+            }
+
+            .navbar-nav {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-pack: end;
+                -ms-flex-pack: end;
+                justify-content: flex-end;
+                margin: 0;
+            }
+
+            .nav-item {
+                margin: 0;
+                margin-left: 2rem;
+            }
+
+            .navbar-cng .navbar-nav .nav-link {
+                color: var(--dark);
+            }
+
+            .test-row,
+            .about-row,
+            .contact-row {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+
+            .popular-row,
+            .blog-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .about-row {
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+            }
+
+            .about-left {
+                margin: 0;
+            }
+
+            .facts-row {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .contact-row {
+                row-gap: 0;
+            }
+
+            .contact-form .form-control {
+                margin-left: 0;
+            }
+
+            .contact-form .form-control:nth-child(1) {
+                margin-top: 0;
+            }
+
+            .contact-right {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            {% if category == 'error' %}
+                <div class="alert alert-danger alter-dismissable fade show" role=alert>
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% else %}
+                <div class="alert alert-success alter-dismissable fade show" role=alert>
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endwith %}
+    </nav>
+    <!-- Trigger Button for Popup Form -->
+    <button id="popupFormButton" class="btn btn-primary mt-5">Plan Your Trip</button>
+
+    <!-- Popup Form -->
+    <div id="popupForm" class="popup-overlay">
+        <div class="popup-content">
+            <div class="card">
+                <div class="card-header">
+                    <span class="close-btn" onclick="closePopup()">&times;</span>
+                    <h2 class="card-title">Group Travel Planner</h2>
+                </div>
+                <div class="card-body">
+                    <form id="submitForm" onsubmit="return validateForm()">
+                        <div class="form-group">
+                            <label>Group Members:</label>
+                            <input type="text" id="firstName" class="form-control mb-2" placeholder="First Name">
+                            <input type="text" id="lastName" class="form-control mb-2" placeholder="Last Name">
+                            <button type="button" class="btn btn-secondary mb-3" onclick="addMember()">Add Member</button>
+                        
+                            <ul id="membersList" class="list-group"></ul> <!-- Members list will appear here -->
+                        </div>
+
+                        <div class="form-group">
+                            <label for="startDate">Start Date:</label>
+                            <input type="date" id="startDate" name="startDate" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="endDate">End Date:</label>
+                            <input type="date" id="endDate" name="endDate" class="form-control" required oninput="validateDates()"> 
+                            <span id="dateError" style="color: red;"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="destination">Destination:</label>
+                            <input type="text" id="destination" name="destination" class="form-control" placeholder="Country or City" required>
+                        </div>  
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </form>
+                    <script>
+                        
+                        function initAutocomplete() {
+                            var input = document.getElementById('destination');
+                            var autocomplete = new google.maps.places.Autocomplete(input);
+                        }
+                        google.maps.event.addDomListener(window, 'load', initAutocomplete);
+                    </script>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="/static/recScript.js"></script> <!-- Link to your JavaScript file -->
+
+    
+</body>
+</html>
