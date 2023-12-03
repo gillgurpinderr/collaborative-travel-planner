@@ -7,6 +7,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="static/recStyle.css">
+    <script>
+        var recommendations = {{ recommendations | tojson | safe }};
+    </script>
     <!-- Add the provided styles here -->
     <style>
         :root {
@@ -111,9 +114,8 @@
 
         <!-- Filters -->
         <div id="filters" class="btn-group mb-4" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-outline-secondary" onclick="filterResults('nowOpen')">Now Open</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="filterResults('fastResponding')">Fast Responding</button>
-            <button type="button" class="btn btn-outline-secondary" onclick="filterResults('price')">Price</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="filterResults('name')">Name</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="filterResults('rating')">Rating</button>
         </div>
 
         <!-- Results -->
@@ -127,5 +129,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="static/recommendations.js"></script>
+    
 </body>
 </html>
