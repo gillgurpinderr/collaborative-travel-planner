@@ -14,6 +14,7 @@ from .__init__ import db
 from .__init__ import User
 from random_word import RandomWords
 from .secret import GOOGLE_API_KEY
+from .recommendations import run_algorithm
 
 r = RandomWords() # this object generates as the name suggests, random words; used for key phrase generation
 auth = Blueprint('auth',__name__) # basically, creating the auth module of webpage
@@ -185,7 +186,10 @@ def recommendation():
         start_date = form.get('startDate')
         end_date = form.get('endDate')
         destination = form.get('destination')
-        print(f"{cleaned_list} {start_date} {end_date} {destination}")    
+        destination = destination.split(',')[0]
+        query = form.get('search')
+        print(f"{cleaned_list} {start_date} {end_date} {destination} {query}")  
+        run_algorithm(destination, query)
         return redirect(url_for('auth.recommendation_results'))
         
     return render_template('recommendation.html', api_key=GOOGLE_API_KEY)

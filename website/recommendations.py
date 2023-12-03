@@ -63,10 +63,8 @@ def recommend_locations(user_city, distance_filter, keyword):
 
     return sorted_places
 
-if __name__ == "__main__":
-    search_input = input("Enter what you want to search for: ")
-
-    recommended_places = recommend_locations(user_city="NYC", distance_filter=5000, keyword=search_input)
+def run_algorithm(user_city, query):
+    recommended_places = recommend_locations(user_city=user_city, distance_filter=5000, keyword=query)
 
     print("\nRecommended Places (sorted by rating):")
     for place in recommended_places:
