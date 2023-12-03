@@ -1,51 +1,68 @@
-// Dummy data (Replace with real data from your backend)
-const recommendations = [
-    { name: "Restaurant A", nowOpen: true, fastResponding: true, price: "$$" },
-    { name: "Restaurant B", nowOpen: false, fastResponding: true, price: "$" },
-    // ... more data
-];
-
-// Function to filter and display results
 function filterResults(filterType) {
-    let filteredData;
-    switch(filterType) {
-        case 'nowOpen':
-            filteredData = recommendations.filter(r => r.nowOpen);
+    let sortedData;
+    switch (filterType) {
+        case 'rating':
+            sortedData = recommendations.slice().sort((a, b) => (a.rating > b.rating) ? -1 : 1);
             break;
-        case 'fastResponding':
-            filteredData = recommendations.filter(r => r.fastResponding);
-            break;
-        case 'price':
-            filteredData = recommendations.sort((a, b) => a.price.length - b.price.length);
+        case 'name':
+            sortedData = recommendations.slice().sort((a, b) => a.name.localeCompare(b.name));
             break;
         default:
-            filteredData = recommendations;
+            sortedData = recommendations;
     }
 
-    displayResults(filteredData);
+    displayResults(sortedData);
 }
 
 function displayResults(data) {
     const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = ''; // Clear previous results
+    resultsDiv.innerHTML = ''; // clear previous results
     data.forEach(rec => {
         const colDiv = document.createElement('div');
         colDiv.className = 'col-md-4 mb-4';
 
         const cardDiv = document.createElement('div');
         cardDiv.className = 'card';
+        
+        // Add click event listener to each card
+        cardDiv.addEventListener('click', () => {
+            handleCardClick(rec.name, rec.address); // pass data on click
+        });
 
         cardDiv.innerHTML = `
             <div class="card-body">
                 <h5 class="card-title">${rec.name}</h5>
-                <p class="card-text">Now Open: ${rec.nowOpen ? 'Yes' : 'No'}, Fast Responding: ${rec.fastResponding ? 'Yes' : 'No'}, Price: ${rec.price}</p>
+                <p class="card-text">Rating: ${rec.rating} &#9733;<br> Address: ${rec.address}</p>
             </div>
         `;
+        cardDiv.classList.add('clickable-card');
 
         colDiv.appendChild(cardDiv);
         resultsDiv.appendChild(colDiv);
     });
 }
 
-// Initially display all results
-displayResults(recommendations);
+function handleCardClick(cardName, cardAddress) {
+    fetch('/results', {
+        method: 'POST',
+        body: JSON.stringify({ cardName, cardAddress }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url; // redirect if Flask sends redirect
+        } else {
+            console.log('No redirect response');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function showInitialResults() {
+    displayResults(recommendations);
+}
+showInitialResults();
