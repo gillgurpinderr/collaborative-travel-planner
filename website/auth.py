@@ -100,6 +100,7 @@ def handle_sign_in(form):
 # where user starts if they have never used our app before
 @auth.route("/auth", methods=['GET', 'POST'])
 def index():
+    session.clear()
     if request.method == 'POST':
         if 'name' in request.form:
             new_html = handle_sign_up(request.form)
@@ -177,6 +178,12 @@ def protected():
 @auth.route('/recommendation', methods=['GET', 'POST'])
 @login_is_required
 def recommendation():
+    try:
+        session.pop('recommendations', None)
+        session.pop('start_date', None)
+        session.pop('end_date', None)
+    except Exception as e:
+        pass
     if request.method == 'POST':
         form = request.form    
         members_list = form.get('membersList')
@@ -200,12 +207,17 @@ def recommendation():
 @auth.route('/results', methods=['GET', 'POST'])
 @login_is_required
 def recommendation_results():
-    recommendations = session.get('recommendations')
-    start_date = session.get('start_date')
-    end_date = session.get('end_date')
-    start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
-    end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
-
+    try:
+        recommendations = session.get('recommendations')
+        start_date = session.get('start_date')
+        end_date = session.get('end_date')
+        start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+    except:
+        session.pop('recommendations', None)
+        session.pop('start_date', None)
+        session.pop('end_date', None)
+        return redirect(url_for('auth.recommendation'))
 
     if request.method == 'POST':
         user = User.query.filter_by(email=session["email"]).first()
@@ -225,6 +237,9 @@ def recommendation_results():
 @auth.route('/itinerary')
 @login_is_required
 def itinerary():
+    session.pop('recommendations', None)
+    session.pop('start_date', None)
+    session.pop('end_date', None)
     user = User.query.filter_by(email=session["email"]).first()
     itineraries = Itinerary.query.filter_by(user_email=user.email).all()
     return render_template('itinerary.html', itineraries=itineraries)
