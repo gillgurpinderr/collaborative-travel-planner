@@ -105,6 +105,11 @@ function gatherListData() {
 document.getElementById('submitForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Prevent default form submission
 
+    if (!validateForm()) {
+        // If form validation fails, do not proceed with submission
+        return;
+    }
+
     let formData = new FormData(this);
     let membersList = gatherListData();
     formData.append('membersList', JSON.stringify(membersList));
@@ -118,7 +123,6 @@ document.getElementById('submitForm').addEventListener('submit', function (e) {
             window.location.href = response.url; // Redirect if Flask sends redirect
         } else {
             console.log('No redirect response');
-            window.location.href = '/recommendation_results';
         }
     })
     .catch(error => {
