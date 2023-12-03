@@ -59,15 +59,10 @@ def recommend_locations(user_city, distance_filter, keyword):
                 'photo_url': photo_url
             })
 
-    sorted_places = sorted(recommended_places_with_ratings, key=lambda x: float(x['rating']) if x['rating'] != 'N/A' else None, reverse=True)
+    sorted_places = sorted(recommended_places_with_ratings, key=lambda x: float(x['rating']) if x['rating'] != 'N/A' else -1, reverse=True)
 
     return sorted_places
 
 def run_algorithm(user_city, query):
     recommended_places = recommend_locations(user_city=user_city, distance_filter=5000, keyword=query)
-
-    print("\nRecommended Places (sorted by rating):")
-    for place in recommended_places:
-        print(f"{place['name']}: {place['address']} - Rating: {place['rating']}")
-        print("Photo URL:")
-        print(place['photo_url'])
+    return recommended_places

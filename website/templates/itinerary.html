@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>User Itinerary</title>
+    <meta name="description" content="">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/itinerary.css">
+</head>
+<body>
+    <h1>User Itinerary</h1>
+    <div class="back-btn-container">
+        <a href="{{ url_for('auth.recommendation_results') }}"><button class='back-btn'>Go Back To Recommendations Page</button></a>
+    </div>
+    <ul class="itinerary-container">
+        {% for itinerary in itineraries %}
+            <li class="itinerary-item">
+                <h3>{{ itinerary.name }}</h3>
+                <p><strong>Address:</strong> {{ itinerary.address }}</p>
+                <p><strong>Start Date:</strong> {{ itinerary.start_date }}</p>
+                <p><strong>End Date:</strong> {{ itinerary.end_date }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

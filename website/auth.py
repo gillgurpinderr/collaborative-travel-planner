@@ -1,4 +1,5 @@
 import ast
+from datetime import datetime
 from functools import wraps
 import json
 import os
@@ -11,7 +12,7 @@ from pip._vendor import cachecontrol
 from google.oauth2 import id_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from .__init__ import db
-from .__init__ import User
+from .__init__ import User, Itinerary
 from random_word import RandomWords
 from .secret import GOOGLE_API_KEY
 from .recommendations import run_algorithm
@@ -170,7 +171,6 @@ def protected():
         name = f", "
         name += str(session['name'])
     except:
-        
         pass
     return render_template('protected.html', name=name)
 
@@ -189,15 +189,45 @@ def recommendation():
         destination = destination.split(',')[0]
         query = form.get('search')
         print(f"{cleaned_list} {start_date} {end_date} {destination} {query}")  
-        run_algorithm(destination, query)
+        recommendations = run_algorithm(destination, query)
+        session['recommendations'] = recommendations
+        session['start_date'] = start_date
+        session['end_date'] = end_date
         return redirect(url_for('auth.recommendation_results'))
         
     return render_template('recommendation.html', api_key=GOOGLE_API_KEY)
 
-@auth.route('/results')
+@auth.route('/results', methods=['GET', 'POST'])
 @login_is_required
 def recommendation_results():
-    return render_template('recommendations_results.html')
+    recommendations = session.get('recommendations')
+    start_date = session.get('start_date')
+    end_date = session.get('end_date')
+    start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+    end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+
+
+    if request.method == 'POST':
+        user = User.query.filter_by(email=session["email"]).first()
+        card_data = request.json
+        card_name = card_data.get('cardName')
+        address = card_data.get('cardAddress')
+        try:
+            new_itinerary = Itinerary(start_date=start_date , end_date=end_date, name=card_name, address=address, user_email=user.email)
+            db.session.add(new_itinerary)
+            db.session.commit()
+        except Exception as e:
+            flash('Error adding to itinerary.',category='error')
+        return redirect(url_for('auth.itinerary'))
+        
+    return render_template('recommendations_results.html', recommendations=recommendations)
+
+@auth.route('/itinerary')
+@login_is_required
+def itinerary():
+    user = User.query.filter_by(email=session["email"]).first()
+    itineraries = Itinerary.query.filter_by(user_email=user.email).all()
+    return render_template('itinerary.html', itineraries=itineraries)
 
 @auth.route('/about')
 @login_is_required
