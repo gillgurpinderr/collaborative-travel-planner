@@ -1,3 +1,4 @@
+import ast
 from functools import wraps
 import json
 import os
@@ -177,12 +178,14 @@ def protected():
 def recommendation():
     if request.method == 'POST':
         form = request.form    
-        first_name = form.get('firstName')
-        last_name = form.get('lastName')
+        members_list = form.get('membersList')
+        members_list = ast.literal_eval(members_list)
+        cleaned_list = []
+        cleaned_list = [item.split(' \n', 1)[0] for item in members_list]
         start_date = form.get('startDate')
         end_date = form.get('endDate')
         destination = form.get('destination')
-        print(f"{first_name} {last_name} {start_date} {end_date} {destination}")    
+        print(f"{cleaned_list} {start_date} {end_date} {destination}")    
         return redirect(url_for('auth.recommendation_results'))
         
     return render_template('recommendation.html', api_key=GOOGLE_API_KEY)

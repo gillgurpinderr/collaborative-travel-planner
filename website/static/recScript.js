@@ -91,3 +91,37 @@ function editMember(button) {
         li.appendChild(button); // Append Delete button
     }
 };
+
+function gatherListData() {
+    let ul = document.getElementById("membersList");
+    let items = ul.getElementsByTagName("li");
+    let memberData = [];
+    for (let i = 0; i < items.length; ++i) {
+        memberData.push(items[i].textContent);
+    }
+    return memberData;
+}
+
+document.getElementById('submitForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    let formData = new FormData(this);
+    let membersList = gatherListData();
+    formData.append('membersList', JSON.stringify(membersList));
+
+    fetch('/recommendation', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url; // Redirect if Flask sends redirect
+        } else {
+            console.log('No redirect response');
+            window.location.href = '/recommendation_results';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
