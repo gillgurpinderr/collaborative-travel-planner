@@ -21,6 +21,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 client_secret.json
+secret.py
 
 test.py
 test2.py
