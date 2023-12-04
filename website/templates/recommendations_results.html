@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendation Results</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/recStyle.css">
+    <script>
+        var recommendations = {{ recommendations | tojson | safe }};
+    </script>
+    <!-- Add the provided styles here -->
+    <style>
+        :root {
+            --green: #1c3464;
+            --dark-grey: #333;
+            --trans: all 0.3s ease-in-out;
+        }
+
+        body {
+            background-color: #0b2451; /* Set the background color to blue (#6495ED) */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1320px;
+            padding: 0 1rem;
+            margin: 0 auto;
+        }
+
+        .mt-5 {
+            margin-top: 5rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 4rem;
+        }
+
+        .btn-group button {
+            background-color: var(--green);
+            color: #fff;
+            border: 1px solid var(--green);
+            transition: background-color var(--trans);
+        }
+
+        .btn-group button:hover {
+            background-color: var(--dark-grey);
+        }
+
+        .row .col-md-4 {
+            flex: 0 0 33.33333%;
+            max-width: 33.33333%;
+        }
+
+        .card {
+            margin-bottom: 2rem;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            transition: box-shadow var(--trans);
+        }
+
+        .card:hover {
+            box-shadow: 0 0 18px -4px rgba(109, 109, 109, 0.64);
+        }
+
+        .card-title {
+            color: var(--green);
+        }
+
+        .card-text {
+            color: var(--dark-grey);
+        }
+
+        /* Added styles */
+        .contact-right {
+            margin: 0;
+        }
+
+
+    </style>
+</head>
+<body>
+    <nav>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            {% if category == 'error' %}
+                <div class="alert alert-danger alter-dismissable fade show" role=alert>
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% else %}
+                <div class="alert alert-success alter-dismissable fade show" role=alert>
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endwith %}
+    </nav>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-white">Recommendation Results</h2> <!-- Adjusted text color to white -->
+
+        <!-- Filters -->
+        <div id="filters" class="btn-group mb-4" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-outline-secondary" onclick="filterResults('name')">Name</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="filterResults('rating')">Rating</button>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="row">
+            <!-- Dynamic content will be loaded here based on filters -->
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optional, if you need Bootstrap JS components) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="static/recommendations.js"></script>
+    
+</body>
+</html>

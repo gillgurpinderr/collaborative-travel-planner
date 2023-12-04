@@ -4,13 +4,7 @@ from flask import Flask
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
-DB_NAME = "database.db"
-
-class User(db.Model, UserMixin):
-    email = db.Column(db.String(320), primary_key=True)
-    password = db.Column(db.String(64))
-    name = db.Column(db.String(150))
+from .models import *
     
 def create_app():
     app = Flask(__name__)

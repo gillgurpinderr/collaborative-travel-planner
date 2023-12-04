@@ -7,6 +7,7 @@
         <title>WanderSync</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <!-- font awesome cdn -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <!-- fonts -->
@@ -18,14 +19,37 @@
         <link rel = "stylesheet" href = "static/WanderSync.css">
         <link rel = "stylesheet" href = "static/responsive.css">
 </head>
+    <style>
+        button {
+            background-color: #ddd;
+            border: none;
+            color: black;
+            padding: 1px 1px;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+         button2{
+             background-color: #ddd;
+            border: none;
+            color: black;
+            padding: 12px 12px;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+    </style>
   <body>
 
     <!-- navbar  -->
-    <nav class = "navbar">
-        <div class = "container flex">
-            <a href = "{{ url_for('auth.protected') }}" class = "site-brand">
-                Wander<span>Sync</span>
-            </a>
+        <nav class = "navbar">
+            <div class = "container flex">
+                <a href = "{{ url_for('auth.protected') }}" class = "site-brand">
+                    Wander<span>Sync</span>
+                </a>
 
             <button type = "button" id = "navbar-show-btn" class = "flex">
                 <i class = "fas fa-bars"></i>
@@ -49,6 +73,12 @@
                         <li class = "nav-item">
                             <a href = "{{ url_for('auth.contact') }}" class = 'nav-link'>Contact</a>
                         </li>
+                          <li class = "nav-item">
+                            <a href = "{{ url_for('auth.itinerary') }}" class = 'nav-link'>Itinerary</a>
+                        </li>
+                        <li class = "nav-item">
+                         <a href="/logout"><button type="button" style=" background-color: #1c3464" class = 'nav-link' id="logoutButton">Logout</button></a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -59,8 +89,8 @@
         <header class = "flex">
             <div class = "container">
                 <div class = "header-title">
-                    <h1>Leave Your Footprints</h1>
-                    <p>WanderSynch offers travel destination's across the globe, with recommendations for activities based off of your likes and interests. </p>
+                    <h1>Hello{{ name }}!</h1>
+                    <p>WanderSync offers travel destination's across the globe, with recommendations for locations based off of your interests. </p>
                 </div>
                 <div class = "header-form">
                     <h2>Choose your Travel location:</h2>
@@ -90,10 +120,10 @@
                         <div class = "featured-item-content">
                             <span>
                                 <i class = "fas fa-map-marker-alt"></i>
-                                Reo De Janeiro, Brazil
+                                Rio De Janeiro, Brazil
                             </span>
                             <div>
-                                <p class = "text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta sed dignissimos libero soluta illum, harum amet excepturi sit?</p>
+                                <p class = "text">Rio de Janeiro is a huge seaside city in Brazil, famed for its Copacabana and Ipanema beaches, 38m Christ the Redeemer statue atop Mount Corcovado and for Sugarloaf Mountain, a granite peak with cable cars to its summit. The city is also known for its sprawling favelas (shanty towns). Its raucous Carnaval festival, featuring parade floats, flamboyant costumes and samba dancers, is considered the world’s largest</p>
                             </div>
                         </div>
                     </div>
@@ -106,7 +136,7 @@
                                 North Bondi, Australia
                             </span>
                             <div>
-                                <p class = "text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta sed dignissimos libero soluta illum, harum amet excepturi sit?</p>
+                                <p class = "text">North Bondi is a coastal, eastern suburb of Sydney, in the state of New South Wales, Australia 7 kilometres east of the Sydney central business district, in the local government area of Waverley Council</p>
                             </div>
                         </div>
                     </div>
@@ -119,7 +149,7 @@
                                 Berlin, Germany
                             </span>
                             <div>
-                                <p class = "text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta sed dignissimos libero soluta illum, harum amet excepturi sit?</p>
+                                <p class = "text">Berlin, Germany’s capital, dates to the 13th century. Reminders of the city's turbulent 20th-century history include its Holocaust memorial and the Berlin Wall's graffitied remains. Divided during the Cold War, its 18th-century Brandenburg Gate has become a symbol of reunification. The city's also known for its art scene and modern landmarks like the gold-colored, swoop-roofed Berliner Philharmonie, built in 1963</p>
                             </div>
                         </div>
                     </div>
@@ -129,10 +159,10 @@
                         <div class = "featured-item-content">
                             <span>
                                 <i class = "fas fa-map-marker-alt"></i>
-                                Khwaeng wat arun, thailand
+                                Bangkok, thailand
                             </span>
                             <div>
-                                <p class = "text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta sed dignissimos libero soluta illum, harum amet excepturi sit?</p>
+                                <p class = "text">Bangkok, Thailand’s capital, is a large city known for ornate shrines and vibrant street life. The boat-filled Chao Phraya River feeds its network of canals, flowing past the Rattanakosin royal district, home to opulent Grand Palace and its sacred Wat Phra Kaew Temple. Nearby is Wat Pho Temple with an enormous reclining Buddha and, on the opposite shore, Wat Arun Temple with its steep steps and Khmer-style spire.</p>
                             </div>
                         </div>
                     </div>
@@ -145,7 +175,8 @@
                                 Rome, Italy
                             </span>
                             <div>
-                                <p class = "text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta sed dignissimos libero soluta illum, harum amet excepturi sit?</p>
+                                <p class = "text">Rome is the capital city of Italy. It is also the capital of the Lazio region, the centre of the Metropolitan City of Rome, and a special comune named Comune di Roma Capitale.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -158,7 +189,7 @@
                                 fuvahmulah, maldives
                             </span>
                             <div>
-                                <p class = "text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta sed dignissimos libero soluta illum, harum amet excepturi sit?</p>
+                                <p class = "text">Fuvahmulah is an island in the Maldives. It is under Maldives’ administrative divisions of Gnaviyani Atoll or Nyaviyani Atoll. The inhabitants speak a distinctive form of the Dhivehi language, locally known as "fuvahmulaki baha." Fuvahmulah means "Island of the Areca nut palms", Fuvah in the local language.</p>
                             </div>
                         </div>
                     </div>
@@ -178,37 +209,26 @@
                 <div class = "services-row">
                     <div class = "services-item">
                         <span class = "services-icon">
+                            <i class = "fas fa-mountain facts-icon"></i>
+                        </span>
+                        <h3>Natural Language Processing</h3>
+                        <a href = "{{ url_for('auth.recommendation') }}" class = "btn">Explore</a>
+                    </div>
+
+                    <div class = "services-item">
+                        <span class = 'services-icon'>
                             <i class = "fas fa-hotel"></i>
                         </span>
-                        <h3>Luxurious Hotel</h3>
-                        <p class = "text">We offer the best, and cheapest hotel prices online. Parterning with priceline to get you the best price around!</p>
-                        <a href = "#" class = "btn">Read more</a>
+                        <h3>Recommendations</h3>
+                        <a href = "{{ url_for('auth.recommendation') }}" class = "btn">Explore</a>
                     </div>
 
                     <div class = "services-item">
                         <span class = "services-icon">
                             <i class = "fas fa-map-marked-alt"></i>
                         </span>
-                        <h3>Travel Guide</h3>
-                        <p class = "text">Itenery for travel destinations</p>
-                        <a href = "#" class = "btn">Read more</a>
-                    </div>
-
-                    <div class = "services-item">
-                        <span class = "services-icon">
-                            <i class = "fas fa-money-bill"></i>
-                        </span>
-                        <h3>Suitable Price</h3>
-                        <p class = "text">Prices on flights are also a key feature for us we work best with parterning airline to get the best price.</p>
-                        <a href = "#" class = "btn">Read more</a>
-                    </div>
-                    <div class = "services-item">
-                        <span class = 'services-icon'>
-                            <i class = "fas fa-mountain facts-icon"></i>
-                        </span>
-                        <h3>Recommendations</h3>
-                        <p class = "text"> User based recommendations for activities bases on interest and location.</p>
-                        <a href = "#" class = "btn">Read more</a>
+                        <h3>Itineraries</h3>
+                        <a href = "{{ url_for('auth.recommendation') }}" class = "btn">Explore</a>
                     </div>
                 </div>
             </div>
@@ -222,35 +242,30 @@
                     <a href = "{{ url_for('auth.protected') }}" class = "site-brand">
                         Wander<span>Sync</span>
                     </a>
-                    <p class = "text">@Copyright WanderSync.Inc 2023. All rights reserved</p>
+                    <p class = "text">@Copyright WanderSync Inc. 2023 All rights reserved</p>
                 </div>
 
                 <div class = "footer-item">
                     <h2>Follow us on: </h2>
                     <ul class = "social-links">
                         <li>
-                            <a href = "#">
+                            <a href = "https://facebook.com" target="_blank">
                                 <i class = "fab fa-facebook-f"></i>
                             </a>
                         </li>
                         <li>
-                            <a href = "#">
+                            <a href = "https://instagram.com" target="_blank">
                                 <i class = "fab fa-instagram"></i>
                             </a>
                         </li>
                         <li>
-                            <a href = "#">
+                            <a href = "https://x.com" target="_blank">
                                 <i class = "fab fa-twitter"></i>
                             </a>
                         </li>
                         <li>
-                            <a href = "#">
+                            <a href = "https://pinterest.com" target="_blank">
                                 <i class = "fab fa-pinterest"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href = "#">
-                                <i class = "fab fa-google-plus"></i>
                             </a>
                         </li>
                     </ul>
@@ -259,17 +274,17 @@
                 <div class = "footer-item">
                     <h2>Popular Places:</h2>
                     <ul>
-                        <li><a href = "#">Thailand</a></li>
-                        <li><a href = "#">Australia</a></li>
-                        <li><a href = "#">Maldives</a></li>
-                        <li><a href = "#">Switzerland</a></li>
-                        <li><a href = "#">Germany</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Thailand</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Australia</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Maldives</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Switzerland</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Germany</a></li>
                     </ul>
                 </div>
 
                 <div class = "subscribe-form footer-item">
                     <h2>Subscribe for Newsletter!</h2>
-                    <form class = "flex">
+                    <form action= "{{ url_for('auth.about') }}" class = "flex">
                         <input type = "email" placeholder="Enter Email" class = "form-control">
                         <input type = "submit" class = "btn" value = "Subscribe">
                     </form>
@@ -277,7 +292,8 @@
             </div>
         </footer>
 
-    <a href="/logout"><button type="button" id="logoutButton">Logout</button><a>
+
      <script src="static/HomePage.js"></script>
+  <script src="/static/recScript.js"></script>
 </body>
 </html>
