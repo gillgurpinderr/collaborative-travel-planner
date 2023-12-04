@@ -64,7 +64,6 @@ def text_processor(user_input):
             output = user_input
     except:
         output = user_input
-    print(output)
     return output
 
 def find_locations(location, radius=1000, keyword=None, types=None):
@@ -83,7 +82,6 @@ def find_locations(location, radius=1000, keyword=None, types=None):
             places = places_result.get('results', [])
             return places
         else:
-            print("Can't find coordinates the location")
             return []
     except:
         location_coordinates = geolocator.geocode('NYC')
