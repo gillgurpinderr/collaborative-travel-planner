@@ -6,9 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recommendation Page - Group Travel Planner</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/recStyle.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="/static/recStyle.css">
+    <link rel = "stylesheet" href = "static/fonts.css">
+    <link rel = "stylesheet" href = "static/normalize.css">
+    <link rel = "stylesheet" href = "static/WanderSync.css">
+    <link rel = "stylesheet" href = "static/responsive.css">
+
     <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&libraries=places"></script>
 
     <!-- Add the improved styles here -->
@@ -296,7 +300,44 @@
     </style>
 </head>
 <body>
-    <nav>
+    <nav class = "navbar">
+        <div class = "container flex">
+            <a href = "{{ url_for('auth.protected') }}" class = "site-brand">
+                Wander<span>Sync</span>
+            </a>
+
+            <button type = "button" id = "navbar-show-btn" class = "flex">
+                <i class = "fas fa-bars"></i>
+            </button>
+            <div id = "navbar-collapse">
+                <button type = "button" id = "navbar-close-btn" class = "flex">
+                    <i class = "fas fa-times"></i>
+                </button>
+                <ul class = "navbar-nav">
+                    <li class = "nav-item">
+
+                        <a href = "{{ url_for('auth.protected') }}" class = 'nav-link'>Home</a>
+                    </li>
+                    <li class = "nav-item">
+                        <a href = "{{ url_for('auth.recommendation') }}" class = 'nav-link'>Recommendations</a>
+                    </li>
+
+                    <li class = "nav-item">
+                        <a href="{{ url_for('auth.about') }}" class="nav-link">About</a>
+                    </li>
+                    <li class = "nav-item">
+                        <a href = "{{ url_for('auth.contact') }}" class = 'nav-link'>Contact</a>
+                    </li>
+                        <li class = "nav-item">
+                        <a href = "{{ url_for('auth.itinerary') }}" class = 'nav-link'>Itinerary</a>
+                    </li>
+                        <li class = "nav-item">
+                        <a href="/logout"><button type="button" style=" background-color: #1c3464" class = 'nav-link' id="logoutButton">Logout</button></a>
+                    </li>
+                </ul>
+                </ul>
+            </div>
+        </div>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% for category, message in messages %}
             {% if category == 'error' %}
