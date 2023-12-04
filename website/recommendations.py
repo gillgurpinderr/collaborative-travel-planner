@@ -7,15 +7,14 @@ from .secret import GOOGLE_API_KEY
 map = googlemaps.Client(GOOGLE_API_KEY)
 geolocator = Nominatim(user_agent="place-locator")
 
-def filter_nouns_and_adjectives(text):
-    # Load the English language model
+def text_processor(user_input):
+    # loads spaCY English library (sm, md, lg) in terms of size
     nlp = spacy.load("en_core_web_sm")
+    # processes user_input
+    doc = nlp(user_input)
 
-    # Process the input text
-    doc = nlp(text)
-
-    # Define a list of specific adjectives (cuisines)
-    specific_adjectives = [
+    # If these adjectives exist within the user_input, automatically add as a token
+    needed_adjectives = [
         'american', 'italian', 'mexican', 'french', 'chinese', 'japanese', 'indian', 'thai', 'greek', 'mediterranean',
         'spanish', 'korean', 'vietnamese', 'middle eastern', 'moroccan', 'turkish', 'lebanese', 'german', 'english',
         'irish', 'african', 'ethiopian', 'nigerian', 'south african', 'caribbean', 'jamaican', 'cuban', 'latin american',
@@ -28,51 +27,73 @@ def filter_nouns_and_adjectives(text):
         'central american', 'mexican', 'guatemalan', 'salvadoran', 'honduran', 'nicaraguan'
     ]
 
-    # Filter out insignificant adjectives and keep the first relevant noun, the first relevant adjective,
-    # and specific adjectives from the user input
+    # Keeps track of relevant tokens that gets extracted from the user_input
     filtered_tokens = []
 
-    # Flags to track whether a noun and adjective have been added
+
+    # booleans to keep track of noun and adjective
     noun_added = False
     adjective_added = False
 
-    for token in doc:
-        if token.pos_ == 'NOUN' and token.text.lower() and not noun_added:
-            filtered_tokens.append(token.text.lower())
-            noun_added = True
-        elif token.pos_ == 'ADJ' and not adjective_added:
-            filtered_tokens.append(token.text.lower())
-            adjective_added = True
+    
+    try:
+        for token in doc:
+            # Any token that is a noun within the user_input, is added to the filtered_tokens list
+            if token.pos_ == 'NOUN' and token.text.lower() and not noun_added:
+                filtered_tokens.append(token.text.lower())
+                noun_added = True
+            # Only the first adjective token within the user_input, is added to filtered_tokens list
+            elif token.pos_ == 'ADJ' and not adjective_added:
+                filtered_tokens.append(token.text.lower())
+                adjective_added = True
+    except:
+        pass
 
-    # Include specific adjectives from the user input
-    for token in doc:
-        if token.text.lower() in specific_adjectives:
-            filtered_tokens.append(token.text.lower())
-
-    # Join the filtered tokens to form the output string
-    output = ' '.join(filtered_tokens)
-
+    # Finds if any needed_adjectives token are within the input, adds it to filter_tokens list
+    try:
+        for token in doc:
+            if token.text.lower() in needed_adjectives:
+                filtered_tokens.append(token.text.lower())
+    except: 
+        pass
+    # Each token within filtered_tokens will join together to create a string
+    try:
+        if output != None:
+            output = ' '.join(filtered_tokens)
+        else:
+            output = user_input
+    except:
+        output = user_input
     print(output)
-
     return output
 
 def find_locations(location, radius=1000, keyword=None, types=None):
     location_coordinates = geolocator.geocode(location)
     
-    if location_coordinates:
-        places_result = map.places_nearby(
-            location=(location_coordinates.latitude, location_coordinates.longitude),
-            radius=radius,
-            open_now=False,
-            keyword=keyword,
-            type=types
-        )
+    try:
+        if location_coordinates:
+            places_result = map.places_nearby(
+                location=(location_coordinates.latitude, location_coordinates.longitude),
+                radius=radius,
+                open_now=False,
+                keyword=keyword,
+                type=types
+            )
 
-        places = places_result.get('results', [])
-        return places
-    else:
-        print("Can't find coordinates the location")
-        return []
+            places = places_result.get('results', [])
+            return places
+        else:
+            print("Can't find coordinates the location")
+            return []
+    except:
+        location_coordinates = geolocator.geocode('NYC')
+        places_result = map.places_nearby(
+        location=(location_coordinates.latitude, location_coordinates.longitude),
+        radius=radius,
+        open_now=False,
+        keyword='hotels',
+        type=types
+    )
 
 def get_location_details(place_id):
     url = f'https://maps.googleapis.com/maps/api/place/details/json?placeid={place_id}&key={GOOGLE_API_KEY}'
@@ -96,8 +117,11 @@ def recommend_locations(user_city, distance_filter, keyword):
 
     recommended_places_with_ratings = []
 
-    preprocessed_text = filter_nouns_and_adjectives(keyword)
-    places = find_locations(user_city, radius=distance_filter, keyword=preprocessed_text, types=preprocessed_text)
+    preprocessed_text = text_processor(keyword)
+    try:
+        places = find_locations(user_city, radius=distance_filter, keyword=preprocessed_text, types=preprocessed_text)
+    except:
+        places = find_locations('NYC', radius=distance_filter, keyword=preprocessed_text, types=preprocessed_text)
 
     for place in places[0:5]:
         place_id = place.get('place_id')
@@ -107,7 +131,7 @@ def recommend_locations(user_city, distance_filter, keyword):
                 'name': place['name'],
                 'address': place['vicinity'],
                 'rating': rating,
-                'photo_url': photo_url
+                # 'photo_url': photo_url
             })
 
     sorted_places = sorted(recommended_places_with_ratings, key=lambda x: float(x['rating']) if x['rating'] != 'N/A' else 0, reverse=True)
@@ -115,5 +139,8 @@ def recommend_locations(user_city, distance_filter, keyword):
     return sorted_places
 
 def run_algorithm(user_city, query):
-    recommended_places = recommend_locations(user_city=user_city, distance_filter=5000, keyword=query)
+    try:
+        recommended_places = recommend_locations(user_city=user_city, distance_filter=10000, keyword=query)
+    except:
+        recommended_places = recommend_locations(user_city='NYC', distance_filter=10000, keyword='hotels')
     return recommended_places
