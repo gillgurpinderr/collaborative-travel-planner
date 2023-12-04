@@ -1,4 +1,5 @@
 import ast
+from datetime import datetime
 from functools import wraps
 import json
 import os
@@ -11,7 +12,7 @@ from pip._vendor import cachecontrol
 from google.oauth2 import id_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from .__init__ import db
-from .__init__ import User
+from .__init__ import User, Itinerary
 from random_word import RandomWords
 from .secret import GOOGLE_API_KEY
 from .recommendations import run_algorithm
@@ -99,6 +100,7 @@ def handle_sign_in(form):
 # where user starts if they have never used our app before
 @auth.route("/auth", methods=['GET', 'POST'])
 def index():
+    session.clear()
     if request.method == 'POST':
         if 'name' in request.form:
             new_html = handle_sign_up(request.form)
@@ -170,34 +172,101 @@ def protected():
         name = f", "
         name += str(session['name'])
     except:
-        
         pass
     return render_template('protected.html', name=name)
 
 @auth.route('/recommendation', methods=['GET', 'POST'])
 @login_is_required
 def recommendation():
+    try:
+        session.pop('recommendations', None)
+        session.pop('start_date', None)
+        session.pop('end_date', None)
+    except Exception as e:
+        pass
     if request.method == 'POST':
         form = request.form    
         members_list = form.get('membersList')
-        members_list = ast.literal_eval(members_list)
+        members_list = ast.literal_eval(members_list) # converts string to a list, since it's currently string type but has correct format
         cleaned_list = []
-        cleaned_list = [item.split(' \n', 1)[0] for item in members_list]
+        cleaned_list = [item.split(' \n', 1)[0] for item in members_list] # when we recieve post, it also sends edit/delete buttons. this cleans the list, and just gives us members names
         start_date = form.get('startDate')
         end_date = form.get('endDate')
         destination = form.get('destination')
         destination = destination.split(',')[0]
         query = form.get('search')
-        print(f"{cleaned_list} {start_date} {end_date} {destination} {query}")  
-        run_algorithm(destination, query)
+        try:
+            recommendations = run_algorithm(destination, query)
+            session['recommendations'] = recommendations
+            session['start_date'] = start_date
+            session['end_date'] = end_date
+            session['members'] = cleaned_list
+        except:
+            flash('Error creating itinerary.', category='error')
+            return redirect(url_for('auth.recommendation'))
         return redirect(url_for('auth.recommendation_results'))
         
     return render_template('recommendation.html', api_key=GOOGLE_API_KEY)
 
-@auth.route('/results')
+@auth.route('/results', methods=['GET', 'POST'])
 @login_is_required
 def recommendation_results():
-    return render_template('recommendations_results.html')
+    try:
+        recommendations = session.get('recommendations')
+        start_date = session.get('start_date')
+        end_date = session.get('end_date')
+        members = str(session.get('members'))
+        start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+    except:
+        session.pop('recommendations', None)
+        session.pop('start_date', None)
+        session.pop('end_date', None)
+        session.pop('members', None)
+        return redirect(url_for('auth.recommendation'))
+
+    if request.method == 'POST':
+        user = User.query.filter_by(email=session["email"]).first()
+        card_data = request.json # this collects the data from the JS cards, sends it here so we can use
+        card_name = card_data.get('cardName')
+        address = card_data.get('cardAddress')
+        try:
+            new_itinerary = Itinerary(start_date=start_date , end_date=end_date, name=card_name, address=address, user_email=user.email, members=members)
+            db.session.add(new_itinerary)
+            db.session.commit()
+        except Exception as e:
+            flash('Error adding to itinerary.',category='error')
+        return redirect(url_for('auth.itinerary'))
+        
+    return render_template('recommendations_results.html', recommendations=recommendations)
+
+@auth.route('/itinerary', methods=['GET', 'POST'])
+@login_is_required
+def itinerary():
+    try:
+        session.pop('recommendations', None)
+        session.pop('start_date', None)
+        session.pop('end_date', None)
+        session.pop('members', None)
+    except:
+        pass
+    user = User.query.filter_by(email=session["email"]).first()
+    itineraries = Itinerary.query.filter_by(user_email=user.email).all()
+    
+    if request.method == 'POST':
+        itinerary_id = request.form.get('itinerary_id')
+        itinerary_to_delete = Itinerary.query.get(itinerary_id)
+        try:
+            db.session.delete(itinerary_to_delete)
+            db.session.commit()
+            flash("Itinerary deleted successfully.", category='success')
+            return redirect(url_for('auth.itinerary'))
+        except Exception as e:
+            db.session.rollback()
+            flash("Error deleting itinerary.", category='error')
+        return redirect(url_for('auth.itinerary'))
+
+    return render_template('itinerary.html', itineraries=itineraries)
 
 @auth.route('/about')
 @login_is_required

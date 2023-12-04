@@ -1,8 +1,8 @@
-<img src="website/static/WanderSync.jpeg">
+<img src="website/static/images/WanderSync.jpeg">
 
 # WanderSync
 
-WanderSync is a collaborative travel planner that uses data science to analyze travel preferences and behaviors of a group of friends planning a trip.
+WanderSync is a collaborative travel planner that uses data science to suggest recommendations.
 
 <br>
 

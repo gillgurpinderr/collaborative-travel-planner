@@ -6,6 +6,7 @@
         <title>WanderSync</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <!-- font awesome cdn -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <!-- fonts -->
@@ -17,6 +18,18 @@
         <link rel = "stylesheet" href = "static/WanderSync.css">
         <link rel = "stylesheet" href = "static/responsive.css">
     </head>
+     <style>
+        button {
+            background-color: #ddd;
+            border: none;
+            color: black;
+            padding: 1px 1px;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+    </style>
     <body>
         <!-- navbar  -->
         <nav class = "navbar">
@@ -46,6 +59,12 @@
                         <li class = "nav-item">
                             <a href = "{{ url_for('auth.contact') }}" class = 'nav-link'>Contact</a>
                         </li>
+                        <li class = "nav-item">
+                            <a href = "{{ url_for('auth.itinerary') }}" class = 'nav-link'>Itinerary</a>
+                        </li>
+                        <li class = "nav-item">
+                         <a href="/logout"><button type="button" style=" background-color: #1c3464" class = 'nav-link' id="logoutButton">Logout</button></a>
+                        </li>
                    </ul>
                 </div>
             </div>
@@ -57,7 +76,7 @@
             <div class = "container">
                 <div class = "header-title">
                     <h1>Contact</h1>
-                    <p>We offer the best prices for vacations, hotels, and activities across the globe for more than 10 years.</p>
+                    <p>We have the best recommendations on vacations, activities, prices and more.</p>
                 </div>
             </div>
         </header>
@@ -87,7 +106,7 @@
                             </span>
                             <div>
                                 <span>Phone</span>
-                                <p class = "text">+01-584-886-009</p>
+                                <p class = "text">212-261-1500</p>
                             </div>
                         </div>
                         <div class = "contact-item">
@@ -96,7 +115,7 @@
                             </span>
                             <div>
                                 <span>Address</span>
-                                <p class = "text">102 East 22nd Street, NY</p>
+                                <p class = "text">1855 Broadway New York, NY, 10023</p>
                             </div>
                         </div>
                         <div class = "contact-item">
@@ -104,8 +123,8 @@
                                 <i class = "fa fa-envelope"></i>
                             </span>
                             <div>
-                                <span>Message</span>
-                                <p class = "text">info@wandersync.com</p>
+                                <span>Email</span>
+                                <a class='text' href="mailto: akar01@nyit.edu">akar01@nyit.edu</a><br><br>
                             </div>
                         </div>
                     </div>
@@ -120,9 +139,9 @@
             <div class = "container footer-row">
                 <div class = "footer-item">
                     <a href = "{{ url_for('auth.protected') }}" class = "site-brand">
-                        Wander<span>Sych</span>
+                        Wander<span>Sync</span>
                     </a>
-                    <p class = "text">@Copyright WanderSync.Inc 2023. All rights reserved</p>
+                    <p class = "text">@Copyright WanderSync Inc. 2023 All rights reserved</p>
                 </div>
 
                 <div class = "footer-item">
@@ -159,11 +178,11 @@
                 <div class = "footer-item">
                     <h2>Popular Places:</h2>
                     <ul>
-                        <li><a href = "#">Thailand</a></li>
-                        <li><a href = "#">Australia</a></li>
-                        <li><a href = "#">Maldives</a></li>
-                        <li><a href = "#">Switzerland</a></li>
-                        <li><a href = "#">Germany</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Thailand</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Australia</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Maldives</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Switzerland</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Germany</a></li>
                     </ul>
                 </div>
 
@@ -179,7 +198,7 @@
         <!-- end of footer -->
 
         <!-- js -->
-        <script src = "static/homePage.js"></script>
+        <script src = "static/HomePage.js"></script>
         <script>
 
         </script>
