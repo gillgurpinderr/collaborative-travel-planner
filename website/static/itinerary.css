@@ -2,31 +2,40 @@ body {
     font-family: 'Open Sans', Arial, sans-serif;
     margin: 20px;
     background-color: #1c3464;
-    color: #FFFFFF; 
+    color: #FFFFFF;
 }
+
 h1 {
     text-align: center;
 }
+
 .itinerary-container {
-    color: #FFFFFF;    ;
+    color: #FFFFFF;
     list-style: none;
     padding: 0;
 }
+
 .itinerary-item {
+    display: flex;
+    justify-content: space-between; /* Align itinerary items and delete-btn side by side */
+    align-items: center; 
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
 }
-.back-btn-container {
+
+.back-btn-container,
+.delete-btn-container {
     display: flex;
     justify-content: center;
     margin-top: 1px;
+    margin-bottom: 20px;
 }
 
-.back-btn {
+.back-btn,
+.delete-btn {
     font-family: 'Open Sans', Arial, sans-serif;
-    display: inline-block;
     padding: 10px 20px;
     margin-top: 20px;
     font-size: 16px;
@@ -36,10 +45,10 @@ h1 {
     border: 1px solid #FFFFFF;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    transition: opacity 0.3s;
+    transition: background-color 0.3s, opacity 0.3s;
 }
 
+.delete-btn:hover,
 .back-btn:hover {
     opacity: 0.8;
     background-color: #2d416b;

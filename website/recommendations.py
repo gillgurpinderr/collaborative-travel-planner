@@ -2,8 +2,8 @@ import googlemaps
 import spacy
 import requests
 from geopy.geocoders import Nominatim
+from .secret import GOOGLE_API_KEY
 
-GOOGLE_API_KEY = "AIzaSyB1VMCjcrzwJHEbVVCJ2FRuqWBcoGeoubM"
 map = googlemaps.Client(GOOGLE_API_KEY)
 geolocator = Nominatim(user_agent="place-locator")
 

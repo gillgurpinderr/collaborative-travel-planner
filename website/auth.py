@@ -234,14 +234,31 @@ def recommendation_results():
         
     return render_template('recommendations_results.html', recommendations=recommendations)
 
-@auth.route('/itinerary')
+@auth.route('/itinerary', methods=['GET', 'POST'])
 @login_is_required
 def itinerary():
-    session.pop('recommendations', None)
-    session.pop('start_date', None)
-    session.pop('end_date', None)
+    try:
+        session.pop('recommendations', None)
+        session.pop('start_date', None)
+        session.pop('end_date', None)
+    except:
+        pass
     user = User.query.filter_by(email=session["email"]).first()
     itineraries = Itinerary.query.filter_by(user_email=user.email).all()
+    
+    if request.method == 'POST':
+        itinerary_id = request.form.get('itinerary_id')
+        itinerary_to_delete = Itinerary.query.get(itinerary_id)
+        try:
+            db.session.delete(itinerary_to_delete)
+            db.session.commit()
+            flash("Itinerary deleted successfully.", category='success')
+            return redirect(url_for('auth.itinerary'))
+        except Exception as e:
+            db.session.rollback()
+            flash("Error deleting itinerary.", category='error')
+        return redirect(url_for('auth.itinerary'))
+
     return render_template('itinerary.html', itineraries=itineraries)
 
 @auth.route('/about')
