@@ -267,7 +267,7 @@ def itinerary():
             flash("Error deleting itinerary.", category='error')
         return redirect(url_for('auth.itinerary'))
 
-    return render_template('itinerary.html', itineraries=itineraries)
+    return render_template('itinerary.html', itineraries=itineraries, user=user)
 
 @auth.route('/about')
 @login_is_required
@@ -319,7 +319,6 @@ def reset(email, token):
             user.password = generate_password_hash(new_password, method='scrypt')
             user.token = None # clear token once user has reset password
             db.session.commit()
-            flash('Your password has been reset!', category='success')
-            return redirect(url_for('auth.index'))
+            return redirect(url_for('auth.index'),)
 
     return render_template('reset.html')
