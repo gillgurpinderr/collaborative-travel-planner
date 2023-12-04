@@ -187,19 +187,23 @@ def recommendation():
     if request.method == 'POST':
         form = request.form    
         members_list = form.get('membersList')
-        members_list = ast.literal_eval(members_list)
+        members_list = ast.literal_eval(members_list) # converts string to a list, since it's currently string type but has correct format
         cleaned_list = []
-        cleaned_list = [item.split(' \n', 1)[0] for item in members_list]
+        cleaned_list = [item.split(' \n', 1)[0] for item in members_list] # when we recieve post, it also sends edit/delete buttons. this cleans the list, and just gives us members names
         start_date = form.get('startDate')
         end_date = form.get('endDate')
         destination = form.get('destination')
         destination = destination.split(',')[0]
         query = form.get('search')
-        print(f"{cleaned_list} {start_date} {end_date} {destination} {query}")  
-        recommendations = run_algorithm(destination, query)
-        session['recommendations'] = recommendations
-        session['start_date'] = start_date
-        session['end_date'] = end_date
+        try:
+            recommendations = run_algorithm(destination, query)
+            session['recommendations'] = recommendations
+            session['start_date'] = start_date
+            session['end_date'] = end_date
+            session['members'] = cleaned_list
+        except:
+            flash('Error creating itinerary.', category='error')
+            return redirect(url_for('auth.recommendation'))
         return redirect(url_for('auth.recommendation_results'))
         
     return render_template('recommendation.html', api_key=GOOGLE_API_KEY)
@@ -211,21 +215,23 @@ def recommendation_results():
         recommendations = session.get('recommendations')
         start_date = session.get('start_date')
         end_date = session.get('end_date')
+        members = str(session.get('members'))
         start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
         end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
     except:
         session.pop('recommendations', None)
         session.pop('start_date', None)
         session.pop('end_date', None)
+        session.pop('members', None)
         return redirect(url_for('auth.recommendation'))
 
     if request.method == 'POST':
         user = User.query.filter_by(email=session["email"]).first()
-        card_data = request.json
+        card_data = request.json # this collects the data from the JS cards, sends it here so we can use
         card_name = card_data.get('cardName')
         address = card_data.get('cardAddress')
         try:
-            new_itinerary = Itinerary(start_date=start_date , end_date=end_date, name=card_name, address=address, user_email=user.email)
+            new_itinerary = Itinerary(start_date=start_date , end_date=end_date, name=card_name, address=address, user_email=user.email, members=members)
             db.session.add(new_itinerary)
             db.session.commit()
         except Exception as e:
@@ -241,6 +247,7 @@ def itinerary():
         session.pop('recommendations', None)
         session.pop('start_date', None)
         session.pop('end_date', None)
+        session.pop('members', None)
     except:
         pass
     user = User.query.filter_by(email=session["email"]).first()
