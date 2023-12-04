@@ -17,6 +17,18 @@
         <link rel = "stylesheet" href = "static/WanderSync.css">
         <link rel = "stylesheet" href = "static/responsive.css">
     </head>
+    <style>
+        button {
+            background-color: #ddd;
+            border: none;
+            color: black;
+            padding: 1px 1px;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+    </style>
 
       <body>
         <!-- navbar  -->
@@ -47,6 +59,12 @@
                         <li class = "nav-item">
                             <a href = "{{ url_for('auth.contact') }}" class = 'nav-link'>Contact</a>
                         </li>
+                         <li class = "nav-item">
+                            <a href = "{{ url_for('auth.itinerary') }}" class = 'nav-link'>Itinerary</a>
+                        </li>
+                        <li class = "nav-item">
+                         <a href="/logout"><button type="button" style=" background-color: #1c3464" class = 'nav-link' id="logoutButton">Logout</button></a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -69,19 +87,53 @@
             <div class = "container">
                 <div class = "title-wrap">
                     <span class = "sm-title">things to know about us</span>
-                    <h2 class = "lg-title">our story</h2>
+                    <h2 class = "lg-title">meet out developers</h2>
                 </div>
 
                 <div class = "about-row">
                     <div class = "about-left my-2">
-                        <img src = "static/images/about-img.jpg" alt = "about img">
+                        <h2>Anurag Kar</h2>
+                        <img src = "static/images/anurag.jpg" alt = "about img">
+                        <p class = "text">Back-End Developer</p>
+                        <p class = "text">929-374-7328</p>
+                        <a href="mailto: akar01@nyit.edu">akar@nyit.edu</a><br><br>
+                        <a href="https://www.linkedin.com/in/anuragcar">Linkedin</a>
                     </div>
-                    <div class = "about-right">
-                        <h2>10 Years of Experience</h2>
-                        <p class = "text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae vitae sed aperiam qui repudiandae earum voluptatem. Modi at inventore omnis veniam necessitatibus exercitationem vel nesciunt delectus ex officiis, culpa doloremque odit illo saepe placeat. Delectus consequuntur reprehenderit omnis accusantium officiis!</p>
-                        <p class = "text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique explicabo blanditiis quidem consequuntur qui quaerat fuga iste tenetur consequatur porro. Aliquam maiores alias doloribus at quisquam quo numquam perferendis. Odit!</p>
+                    <div class = "about-center">
+                        <h2>Anthony Zaccardi</h2>
+                        <img src = "static/images/anthony.jpg" alt = "about img">
+                        <p class = "text">Full-Stack Developer</p>
+                        <p class = "text">312-758-3391</p>
+                         <a href="mailto: azaccard01@nyit.edu">azaccard@nyit.edu</a><br><br>
+                        <a href="https://www.linkedin.com/in/anthony-zaccardi-a4a73013b/">Linkedin</a>
                     </div>
-                </div>
+            </div>
+                 <div class = "about-row">
+                    <div class = "about-left my-2">
+                        <h2>Darren Liu</h2>
+                        <img src = "static/images/darren.jpg" alt = "about img">
+                        <p class = "text">Algorithm Developer</p>
+                        <p class = "text">646-619-7082</p>
+                        <a href = "mailto: dliu20@nyit.edu" >dliu@nyit.edu</a><br><br>
+                        <a href = "https://www.linkedin.com/in/darren-liu-2b36191b3/" >Linkedin</a>
+                    </div>
+                    <div class = "about-center">
+                        <h2>Muhammad Usman</h2>
+                        <img src = "static/images/muhammad.jpg" alt = "about img">
+                        <p class = "text">Full-Stack Developer</p>
+                        <p class = "text">347-743-7611</p>
+                          <a href = "mailto: musman04@nyit.edu">musman04@nyit.edu</a><br><br>
+                        <a href = "http://linkedin.com/in/muhammusman/">Linkedin </a>
+                    </div>
+                     <div class = "about-left my-2">
+                        <h2>Gurpinder Singh</h2>
+                        <img src = "static/images/gurpinder.jpg" alt = "about img">
+                        <p class = "text">Front-End Developer/ Code Deployment</p>
+                        <p class = "text">732-797-8541</p>
+                         <a href="mailto: gsingh@nyit.edu">gsingh@nyit.edu</a><br><br>
+                         <a href = "https://www.linkedin.com/in/mrgsingh/">Linkedin</a>
+                    </div>
+            </div>
             </div>
         </section>
         <!-- end of about section -->
@@ -176,11 +228,11 @@
                 <div class = "footer-item">
                     <h2>Popular Places:</h2>
                     <ul>
-                        <li><a href = "#">Thailand</a></li>
-                        <li><a href = "#">Australia</a></li>
-                        <li><a href = "#">Maldives</a></li>
-                        <li><a href = "#">Switzerland</a></li>
-                        <li><a href = "#">Germany</a></li>
+                         <li><a href = "{{ url_for('auth.recommendation') }}">Thailand</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Australia</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Maldives</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Switzerland</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Germany</a></li>
                     </ul>
                 </div>
 
@@ -194,7 +246,7 @@
             </div>
         </footer>
 
-        <script src = "static/homePage.js"></script>
+        <script src = "static/HomePage.js"></script>
       </body>
 
 </html>

@@ -17,6 +17,18 @@
         <link rel = "stylesheet" href = "static/WanderSync.css">
         <link rel = "stylesheet" href = "static/responsive.css">
     </head>
+     <style>
+        button {
+            background-color: #ddd;
+            border: none;
+            color: black;
+            padding: 1px 1px;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+    </style>
     <body>
         <!-- navbar  -->
         <nav class = "navbar">
@@ -46,6 +58,12 @@
                         <li class = "nav-item">
                             <a href = "{{ url_for('auth.contact') }}" class = 'nav-link'>Contact</a>
                         </li>
+                        <li class = "nav-item">
+                            <a href = "{{ url_for('auth.itinerary') }}" class = 'nav-link'>Itinerary</a>
+                        </li>
+                        <li class = "nav-item">
+                         <a href="/logout"><button type="button" style=" background-color: #1c3464" class = 'nav-link' id="logoutButton">Logout</button></a>
+                        </li>
                    </ul>
                 </div>
             </div>
@@ -57,7 +75,7 @@
             <div class = "container">
                 <div class = "header-title">
                     <h1>Contact</h1>
-                    <p>We offer the best prices for vacations, hotels, and activities across the globe for more than 10 years.</p>
+                    <p>We have the best recommendations on vacations, activities, prices and more.</p>
                 </div>
             </div>
         </header>
@@ -87,7 +105,7 @@
                             </span>
                             <div>
                                 <span>Phone</span>
-                                <p class = "text">+01-584-886-009</p>
+                                <p class = "text">212-222-2322</p>
                             </div>
                         </div>
                         <div class = "contact-item">
@@ -96,7 +114,7 @@
                             </span>
                             <div>
                                 <span>Address</span>
-                                <p class = "text">102 East 22nd Street, NY</p>
+                                <p class = "text">1855 Broadway New York, NY</p>
                             </div>
                         </div>
                         <div class = "contact-item">
@@ -159,11 +177,11 @@
                 <div class = "footer-item">
                     <h2>Popular Places:</h2>
                     <ul>
-                        <li><a href = "#">Thailand</a></li>
-                        <li><a href = "#">Australia</a></li>
-                        <li><a href = "#">Maldives</a></li>
-                        <li><a href = "#">Switzerland</a></li>
-                        <li><a href = "#">Germany</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Thailand</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Australia</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Maldives</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Switzerland</a></li>
+                        <li><a href = "{{ url_for('auth.recommendation') }}">Germany</a></li>
                     </ul>
                 </div>
 
@@ -179,7 +197,7 @@
         <!-- end of footer -->
 
         <!-- js -->
-        <script src = "static/homePage.js"></script>
+        <script src = "static/HomePage.js"></script>
         <script>
 
         </script>
