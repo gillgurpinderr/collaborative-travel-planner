@@ -21,21 +21,21 @@
   <body>
 
     <!-- navbar  -->
-        <nav class = "navbar">
-            <div class = "container flex">
-                <a href = "{{ url_for('auth.protected') }}" class = "site-brand">
-                    Wander<span>Sync</span>
-                </a>
+    <nav class = "navbar">
+        <div class = "container flex">
+            <a href = "{{ url_for('auth.protected') }}" class = "site-brand">
+                Wander<span>Sync</span>
+            </a>
 
-                <button type = "button" id = "navbar-show-btn" class = "flex">
-                    <i class = "fas fa-bars"></i>
+            <button type = "button" id = "navbar-show-btn" class = "flex">
+                <i class = "fas fa-bars"></i>
+            </button>
+            <div id = "navbar-collapse">
+                <button type = "button" id = "navbar-close-btn" class = "flex">
+                    <i class = "fas fa-times"></i>
                 </button>
-                <div id = "navbar-collapse">
-                    <button type = "button" id = "navbar-close-btn" class = "flex">
-                        <i class = "fas fa-times"></i>
-                    </button>
-                    <ul class = "navbar-nav">
-                        <li class = "nav-item">
+                <ul class = "navbar-nav">
+                    <li class = "nav-item">
 
                             <a href = "{{ url_for('auth.protected') }}" class = 'nav-link'>Home</a>
                         </li>
@@ -67,8 +67,9 @@
                     <form class = "flex">
                         <input type = "text" class = "form-control" placeholder="Destination name">
                         <input type="date" class = "form-control" placeholder="Date">
-                        <input type="number" class = "form-control" placeholder="Price ($)">
-                        <input type="submit" class = "btn" value = "Search">
+                        <input type="text" class = "form-control" placeholder="Ex: Top Restaurants">
+{#                        <input type="button" class = "btn" value = "Search" >#}
+                         <a href = "{{ url_for('auth.recommendation') }}" class = 'nav-link'><button2 type="button" style=" background-color: #1c3464" class = 'nav-link' >Search</button2></a>
                     </form>
                 </div>
             </div>
