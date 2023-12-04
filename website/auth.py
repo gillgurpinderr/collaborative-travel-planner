@@ -188,8 +188,9 @@ def recommendation():
         form = request.form    
         members_list = form.get('membersList')
         members_list = ast.literal_eval(members_list) # converts string to a list, since it's currently string type but has correct format
-        cleaned_list = []
-        cleaned_list = [item.split(' \n', 1)[0] for item in members_list] # when we recieve post, it also sends edit/delete buttons. this cleans the list, and just gives us members names
+        cleaned_member_list = []
+        cleaned_member_list = [item.split(' \n', 1)[0] for item in members_list] # when we recieve post, it also sends edit/delete buttons. this cleans the list, and just gives us members names
+        member_string = ', '.join(cleaned_member_list)
         start_date = form.get('startDate')
         end_date = form.get('endDate')
         destination = form.get('destination')
@@ -200,7 +201,7 @@ def recommendation():
             session['recommendations'] = recommendations
             session['start_date'] = start_date
             session['end_date'] = end_date
-            session['members'] = cleaned_list
+            session['members'] = member_string
         except:
             flash('Error creating itinerary.', category='error')
             return redirect(url_for('auth.recommendation'))
