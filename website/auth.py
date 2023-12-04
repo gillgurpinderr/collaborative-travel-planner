@@ -32,12 +32,12 @@ flow = Flow.from_client_secrets_file( # flow object encapsulates and handles goo
     )
 
 def login_is_required(func):
-    @wraps(func)
+    @wraps(func) # this stores original function name
     def function(*args, **kwargs):
-        if 'logged_in' not in session:
+        if 'logged_in' not in session: # return login page if user not signed in
             return redirect(url_for('auth.index'))
         else:
-            return func()
+            return func() # allow user to continue if logged in
     return function
  
 def handle_sign_up(form):
@@ -61,10 +61,10 @@ def handle_sign_up(form):
     elif len(password) > 64:
         flash('Password cannot exceed 64 characters.', category='error')
     else:
-        new_user = User(name=name, email=email, password=generate_password_hash(password, method='scrypt'))
+        new_user = User(name=name, email=email, password=generate_password_hash(password, method='scrypt')) # password encrypted
         try:
             db.session.add(new_user)
-            db.session.commit()
+            db.session.commit() # save DB basicaly
             flash('Account created!', category='success')
             key_phrase = f"{r.get_random_word()} {r.get_random_word()} {r.get_random_word()}" # generate random key phrase for password recovery
             new_user.key_phrase = key_phrase
@@ -102,7 +102,7 @@ def handle_sign_in(form):
 def index():
     session.clear()
     if request.method == 'POST':
-        if 'name' in request.form:
+        if 'name' in request.form: # name not in form to signin
             new_html = handle_sign_up(request.form)
         else:
             new_html = handle_sign_in(request.form)
@@ -119,23 +119,23 @@ def index():
 # redirect to google
 @auth.route("/login")
 def login():
-    authorization_url, state = flow.authorization_url()
+    authorization_url, state = flow.authorization_url() # get auth url and state token for security
     session["state"] = state
     return redirect(authorization_url)
 
 # recieve data from google
 @auth.route("/callback")
 def callback():
-    flow.fetch_token(authorization_response=request.url)
+    flow.fetch_token(authorization_response=request.url) # get token from google
 
-    if not session["state"] == request.args["state"]:
+    if not session["state"] == request.args["state"]: # check if session matches with response
         abort(500)
 
     credentials = flow.credentials
     request_session = requests.session()
     cached_session = cachecontrol.CacheControl(request_session)
     token_request = google.auth.transport.requests.Request(session=cached_session)
-    id_info = id_token.verify_oauth2_token(
+    id_info = id_token.verify_oauth2_token( # verify the token
         id_token=credentials._id_token,
         request=token_request,
         audience=GOOGLE_CLIENT_ID
@@ -179,6 +179,7 @@ def protected():
 @login_is_required
 def recommendation():
     try:
+        # clear these if user has done a search already
         session.pop('recommendations', None)
         session.pop('start_date', None)
         session.pop('end_date', None)
@@ -190,14 +191,15 @@ def recommendation():
         members_list = ast.literal_eval(members_list) # converts string to a list, since it's currently string type but has correct format
         cleaned_member_list = []
         cleaned_member_list = [item.split(' \n', 1)[0] for item in members_list] # when we recieve post, it also sends edit/delete buttons. this cleans the list, and just gives us members names
-        member_string = ', '.join(cleaned_member_list)
+        member_string = ', '.join(cleaned_member_list) # put all members into cleaned string
         start_date = form.get('startDate')
         end_date = form.get('endDate')
         destination = form.get('destination')
-        destination = destination.split(',')[0]
+        destination = destination.split(',')[0] # just use city
         query = form.get('search')
         try:
             recommendations = run_algorithm(destination, query)
+            # store these variables in session for later use/display
             session['recommendations'] = recommendations
             session['start_date'] = start_date
             session['end_date'] = end_date
@@ -217,9 +219,11 @@ def recommendation_results():
         start_date = session.get('start_date')
         end_date = session.get('end_date')
         members = str(session.get('members'))
+        # convert to date objects for DB storage
         start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
         end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
     except:
+        # clear these if error and just let user redo
         session.pop('recommendations', None)
         session.pop('start_date', None)
         session.pop('end_date', None)
@@ -229,8 +233,8 @@ def recommendation_results():
     if request.method == 'POST':
         user = User.query.filter_by(email=session["email"]).first()
         card_data = request.json # this collects the data from the JS cards, sends it here so we can use
-        card_name = card_data.get('cardName')
-        address = card_data.get('cardAddress')
+        card_name = card_data.get('cardName') # place name
+        address = card_data.get('cardAddress') # place address
         try:
             new_itinerary = Itinerary(start_date=start_date , end_date=end_date, name=card_name, address=address, user_email=user.email, members=members)
             db.session.add(new_itinerary)
@@ -245,6 +249,7 @@ def recommendation_results():
 @login_is_required
 def itinerary():
     try:
+        # clear all these so user can add new places
         session.pop('recommendations', None)
         session.pop('start_date', None)
         session.pop('end_date', None)
@@ -254,7 +259,7 @@ def itinerary():
     user = User.query.filter_by(email=session["email"]).first()
     itineraries = Itinerary.query.filter_by(user_email=user.email).all()
     
-    if request.method == 'POST':
+    if request.method == 'POST': # will post when user presses delete
         itinerary_id = request.form.get('itinerary_id')
         itinerary_to_delete = Itinerary.query.get(itinerary_id)
         try:
@@ -263,11 +268,11 @@ def itinerary():
             flash("Itinerary deleted successfully.", category='success')
             return redirect(url_for('auth.itinerary'))
         except Exception as e:
-            db.session.rollback()
+            db.session.rollback() # go back to previous state of DB as failsafe
             flash("Error deleting itinerary.", category='error')
         return redirect(url_for('auth.itinerary'))
 
-    return render_template('itinerary.html', itineraries=itineraries)
+    return render_template('itinerary.html', itineraries=itineraries, user=user)
 
 @auth.route('/about')
 @login_is_required
@@ -319,7 +324,6 @@ def reset(email, token):
             user.password = generate_password_hash(new_password, method='scrypt')
             user.token = None # clear token once user has reset password
             db.session.commit()
-            flash('Your password has been reset!', category='success')
-            return redirect(url_for('auth.index'))
+            return redirect(url_for('auth.index'),)
 
     return render_template('reset.html')

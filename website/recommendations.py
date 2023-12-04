@@ -64,7 +64,6 @@ def text_processor(user_input):
             output = user_input
     except:
         output = user_input
-    print(output)
     return output
 
 def find_locations(location, radius=1000, keyword=None, types=None):
@@ -83,7 +82,6 @@ def find_locations(location, radius=1000, keyword=None, types=None):
             places = places_result.get('results', [])
             return places
         else:
-            print("Can't find coordinates the location")
             return []
     except:
         location_coordinates = geolocator.geocode('NYC')
@@ -140,7 +138,7 @@ def recommend_locations(user_city, distance_filter, keyword):
 
 def run_algorithm(user_city, query):
     try:
-        recommended_places = recommend_locations(user_city=user_city, distance_filter=10000, keyword=query)
+        recommended_places = recommend_locations(user_city=user_city, distance_filter=5000, keyword=query)
     except:
-        recommended_places = recommend_locations(user_city='NYC', distance_filter=10000, keyword='hotels')
+        recommended_places = recommend_locations(user_city='NYC', distance_filter=5000, keyword='hotels')
     return recommended_places
