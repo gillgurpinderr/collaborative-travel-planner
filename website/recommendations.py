@@ -140,7 +140,7 @@ def recommend_locations(user_city, distance_filter, keyword):
 
 def run_algorithm(user_city, query):
     try:
-        recommended_places = recommend_locations(user_city=user_city, distance_filter=10000, keyword=query)
+        recommended_places = recommend_locations(user_city=user_city, distance_filter=5000, keyword=query)
     except:
-        recommended_places = recommend_locations(user_city='NYC', distance_filter=10000, keyword='hotels')
+        recommended_places = recommend_locations(user_city='NYC', distance_filter=5000, keyword='hotels')
     return recommended_places
