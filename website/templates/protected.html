@@ -209,37 +209,26 @@
                 <div class = "services-row">
                     <div class = "services-item">
                         <span class = "services-icon">
+                            <i class = "fas fa-mountain facts-icon"></i>
+                        </span>
+                        <h3>Natural Language Processing</h3>
+                        <a href = "{{ url_for('auth.recommendation') }}" class = "btn">Explore</a>
+                    </div>
+
+                    <div class = "services-item">
+                        <span class = 'services-icon'>
                             <i class = "fas fa-hotel"></i>
                         </span>
-                        <h3>Luxurious Hotel</h3>
-                        <p class = "text">We offer the best, and cheapest hotel prices online. Parterning with priceline to get you the best price around!</p>
-                        <a href = "#" class = "btn">Read more</a>
+                        <h3>Recommendations</h3>
+                        <a href = "{{ url_for('auth.recommendation') }}" class = "btn">Explore</a>
                     </div>
 
                     <div class = "services-item">
                         <span class = "services-icon">
                             <i class = "fas fa-map-marked-alt"></i>
                         </span>
-                        <h3>Travel Guide</h3>
-                        <p class = "text">Itenery for travel destinations</p>
-                        <a href = "#" class = "btn">Read more</a>
-                    </div>
-
-                    <div class = "services-item">
-                        <span class = "services-icon">
-                            <i class = "fas fa-money-bill"></i>
-                        </span>
-                        <h3>Suitable Price</h3>
-                        <p class = "text">Prices on flights are also a key feature for us we work best with parterning airline to get the best price.</p>
-                        <a href = "#" class = "btn">Read more</a>
-                    </div>
-                    <div class = "services-item">
-                        <span class = 'services-icon'>
-                            <i class = "fas fa-mountain facts-icon"></i>
-                        </span>
-                        <h3>Recommendations</h3>
-                        <p class = "text"> User based recommendations for activities bases on interest and location.</p>
-                        <a href = "#" class = "btn">Read more</a>
+                        <h3>Itineraries</h3>
+                        <a href = "{{ url_for('auth.recommendation') }}" class = "btn">Explore</a>
                     </div>
                 </div>
             </div>
@@ -260,28 +249,23 @@
                     <h2>Follow us on: </h2>
                     <ul class = "social-links">
                         <li>
-                            <a href = "#">
+                            <a href = "https://facebook.com" target="_blank">
                                 <i class = "fab fa-facebook-f"></i>
                             </a>
                         </li>
                         <li>
-                            <a href = "#">
+                            <a href = "https://instagram.com" target="_blank">
                                 <i class = "fab fa-instagram"></i>
                             </a>
                         </li>
                         <li>
-                            <a href = "#">
+                            <a href = "https://x.com" target="_blank">
                                 <i class = "fab fa-twitter"></i>
                             </a>
                         </li>
                         <li>
-                            <a href = "#">
+                            <a href = "https://pinterest.com" target="_blank">
                                 <i class = "fab fa-pinterest"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href = "#">
-                                <i class = "fab fa-google-plus"></i>
                             </a>
                         </li>
                     </ul>
@@ -300,7 +284,7 @@
 
                 <div class = "subscribe-form footer-item">
                     <h2>Subscribe for Newsletter!</h2>
-                    <form class = "flex">
+                    <form action= "{{ url_for('auth.about') }}" class = "flex">
                         <input type = "email" placeholder="Enter Email" class = "form-control">
                         <input type = "submit" class = "btn" value = "Subscribe">
                     </form>
