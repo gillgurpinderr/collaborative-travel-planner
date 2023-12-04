@@ -51,7 +51,7 @@ body {
 }
 
 .container-a a:hover {
-    color: #ffffff;
+    color: #7d9ddb;
 }
 
 .container-a button {
@@ -248,23 +248,4 @@ body {
     bottom: 250px;
     left: 100px;
     z-index: 1000;
-}
-
-.logoutButton {
-    font-family: 'Raleway', 'Open Sans', Arial, sans-serif;
-    padding: 10px 20px;
-    margin-top: 20px;
-    font-size: 16px;
-    text-decoration: none;
-    color: #fff;
-    background-color: #1c3464;
-    border: 1px solid #FFFFFF;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, opacity 0.3s;
-}
-
-.logoutButton:hover {
-    opacity: 0.8;
-    background-color: #2d416b;
 }
