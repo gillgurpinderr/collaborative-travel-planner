@@ -17,6 +17,11 @@ function filterResults(filterType) {
 function displayResults(data) {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = ''; // clear previous results
+    if (data.length === 0) {
+        window.location.href = 'recommendation'; // Redirect if there are no cards
+        alert("No results found. Please try again.");
+        return;
+    }
     data.forEach(rec => {
         const colDiv = document.createElement('div');
         colDiv.className = 'col-md-4 mb-4';

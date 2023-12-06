@@ -50,8 +50,13 @@ function validateForm() {
         alert("Please add at least one member.");
         return false; // Prevent form submission
     }
+    
     var startDateString = document.getElementById('startDate').value;
     var endDateString = document.getElementById('endDate').value;
+
+    // Get current date and time
+    var currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // Set current time to midnight
 
     // Splitting date string into components
     var startDateComponents = startDateString.split('-');
@@ -69,13 +74,23 @@ function validateForm() {
         endDateComponents[2]
     );
 
-    if (startDate > endDate) {
-        document.getElementById('dateError').innerText = 'End date cannot be earlier than the start date.';
+    // Check if start date is <= to the current day
+    if (startDate < currentDate) {
+        document.getElementById('dateError').innerText = 'Start date cannot be before the current day.';
+        return false; // Prevent form submission
+    }
+
+    // Check if end date is before the start date or more than many years in the future
+    var maxEndDate = new Date(currentDate.getFullYear() + 1000000, currentDate.getMonth(), currentDate.getDate());
+    if (endDate < startDate || endDate > maxEndDate) {
+        document.getElementById('dateError').innerText = 'End date must be after the start date and must be within a reasonable range.';
         return false; // Prevent form submission
     }
 
     return true; // Allow form submission
 }
+
+
 
 
 // Function to Edit a Member

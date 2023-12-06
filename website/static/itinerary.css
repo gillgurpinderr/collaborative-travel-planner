@@ -20,6 +20,7 @@ h1 {
     justify-content: space-between; /* Align itinerary items and delete-btn side by side */
     align-items: center; 
     flex-wrap: wrap;
+    flex-direction: column;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
@@ -53,4 +54,8 @@ h1 {
 .back-btn:hover {
     opacity: 0.8;
     background-color: #2d416b;
+}
+
+.key_phrase { 
+    text-align: center;
 }
