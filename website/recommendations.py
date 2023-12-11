@@ -1,20 +1,23 @@
+import geopy
+import spacy
 import googlemaps
 import spacy
 import requests
 from geopy.geocoders import Nominatim
-from .secret import GOOGLE_API_KEY
 
+GOOGLE_API_KEY = "AIzaSyC1y0q7qn_GJHLDZt8wytPHwvN6z_B0hAo"
 map = googlemaps.Client(GOOGLE_API_KEY)
 geolocator = Nominatim(user_agent="place-locator")
 
-def text_processor(user_input):
-    # loads spaCY English library (sm, md, lg) in terms of size
+def filter_nouns_and_adjectives(text):
+    # Load the English language model
     nlp = spacy.load("en_core_web_sm")
-    # processes user_input
-    doc = nlp(user_input)
 
-    # If these adjectives exist within the user_input, automatically add as a token
-    needed_adjectives = [
+    # Process the input text
+    doc = nlp(text)
+
+    # Define a list of specific adjectives (cuisines)
+    specific_adjectives = [
         'american', 'italian', 'mexican', 'french', 'chinese', 'japanese', 'indian', 'thai', 'greek', 'mediterranean',
         'spanish', 'korean', 'vietnamese', 'middle eastern', 'moroccan', 'turkish', 'lebanese', 'german', 'english',
         'irish', 'african', 'ethiopian', 'nigerian', 'south african', 'caribbean', 'jamaican', 'cuban', 'latin american',
@@ -27,47 +30,40 @@ def text_processor(user_input):
         'central american', 'mexican', 'guatemalan', 'salvadoran', 'honduran', 'nicaraguan'
     ]
 
-    # Keeps track of relevant tokens that gets extracted from the user_input
+    # Filter out insignificant adjectives and keep the first relevant noun, the first relevant adjective,
+    # and specific adjectives from the user input
     filtered_tokens = []
 
-
-    # booleans to keep track of noun and adjective
+    # Flags to track whether a noun and adjective have been added
     noun_added = False
     adjective_added = False
 
-    
-    try:
-        for token in doc:
-            # Any token that is a noun within the user_input, is added to the filtered_tokens list
-            if token.pos_ == 'NOUN' and token.text.lower() and not noun_added:
-                filtered_tokens.append(token.text.lower())
-                noun_added = True
-            # Only the first adjective token within the user_input, is added to filtered_tokens list
-            elif token.pos_ == 'ADJ' and not adjective_added:
-                filtered_tokens.append(token.text.lower())
-                adjective_added = True
-    except:
-        pass
+    for token in doc:
+        if token.pos_ == 'NOUN' and token.text.lower() and not noun_added:
+            filtered_tokens.append(token.text.lower())
+            noun_added = True
+        elif token.pos_ == 'ADJ' and not adjective_added:
+            filtered_tokens.append(token.text.lower())
+            adjective_added = True
 
-    # Finds if any needed_adjectives token are within the input, adds it to filter_tokens list
-    try:
-        for token in doc:
-            if token.text.lower() in needed_adjectives:
-                filtered_tokens.append(token.text.lower())
-    except: 
-        pass
-    # Each token within filtered_tokens will join together to create a string
-    try:
-        if output != None:
-            output = ' '.join(filtered_tokens)
-        else:
-            output = user_input
-    except:
-        output = user_input
+    # Include specific adjectives from the user input
+    for token in doc:
+        if token.text.lower() in specific_adjectives:
+            filtered_tokens.append(token.text.lower())
+
+    # Join the filtered tokens to form the output string
+    output = ' '.join(filtered_tokens)
+
+    print(output)
+
     return output
 
 def find_locations(location, radius=1000, keyword=None, types=None):
-    location_coordinates = geolocator.geocode(location)
+    try:
+        location_coordinates = geolocator.geocode(location)
+    except geopy.exc.GeocoderUnavailable as e:
+        print(f"Geocoding error: {e}")
+        return []
     
     try:
         if location_coordinates:
@@ -115,11 +111,8 @@ def recommend_locations(user_city, distance_filter, keyword):
 
     recommended_places_with_ratings = []
 
-    preprocessed_text = text_processor(keyword)
-    try:
-        places = find_locations(user_city, radius=distance_filter, keyword=preprocessed_text, types=preprocessed_text)
-    except:
-        places = find_locations('NYC', radius=distance_filter, keyword=preprocessed_text, types=preprocessed_text)
+    preprocessed_text = filter_nouns_and_adjectives(keyword)
+    places = find_locations(user_city, radius=distance_filter, keyword=preprocessed_text, types=preprocessed_text)
 
     for place in places[0:5]:
         place_id = place.get('place_id')
